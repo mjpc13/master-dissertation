@@ -11,9 +11,38 @@ This project is being developed under the Institute of Systems and Robots at the
 \section{Objectives}
 In this work, we aim to design a rigid multisensory apparatus with an onboard computer to map forests. This apparatus combines multiple sensing technologies, such as 3D \acs{LiDAR}, depth cameras, infrared spectroscopy and \acl{IMU} (\acs{IMU}). With this apparatus, we will be able to collect datasets from forest environments, thus supporting forest operations, such as metric-semantic 3D mapping, combustible material identification, and forest cleaning. Aside from designing the apparatus, it is intended to integrate, test, and then compare state-of-the-art 3D mapping techniques based on the ROS middleware.
 
-\section{Requirements}
-The following requirements must be met in order to create a system that will be able to collect data quickly and efficiently:
+\section{MoSCoW Analysis}
 
+In order to create a system able to collect the necessary data in an quick and efficient way the following MoSCoW analysis was performed to easily understand the fundamental features of the project.
+
+\subsubsection*{The apparatus must have:}
+
+\begin{itemize}
+    \item A set of sensors that gather the following data
+    \item At least 2 hours of battery autonomy
+    \item Enough SSD space to record a 2 hour session 
+    \item Resistence to sustain temperatures fo 60degrees Celcius
+    \item Cooling solution that ensures the sensors don't go beyond their maximum operating temperature
+\end{itemize}
+
+\subsubsection*{The apparatus should have:}
+\begin{itemize}
+    \item Comfortable handling during an extended amount of time
+    \item Modularity
+\end{itemize}
+
+\subsubsection*{The apparatus could have:}
+\begin{itemize}
+    \item Easy access to the memory SSD
+    \item Easy battery replacement
+\end{itemize}
+
+\subsubsection*{The apparatus won't have:}
+\begin{itemize}
+    \item Instant visual feedback
+    \item Live \acl*{SLAM}
+    \item Weather resistance
+\end{itemize}
 
 
 \section{Dissertation Structure}
