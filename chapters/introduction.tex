@@ -1,47 +1,52 @@
 Due to their destructive nature, wildfires are often viewed as something to be avoided at all costs, however wildfires play a crucial role in a variety of ecosystems. In addition to rejuvenating the forest, wildfires can increase soil fertility and remove dead organic material, which decreases the likelihood of a more intense and destructive wildfire in the future \cite{bond_fires_2017}. In most fires, the problem occurs when they spiral out of control, causing unintended damage to wildlife and populations. Global warming and an increase in droughts have led to more frequent intensive wildfires in countries that were not historically prone to them. Throughout the Mediterranean region, countries have become accustomed to this natural destructive cycle and have been able to reduce burned areas since 1980 by improving fire control, Portugal remains the exception \cite{turco_decreasing_2016}\cite{european_commission_joint_research_centre_forest_2021}. Keeping a forest clean is essential for controlling wildfires, and forest maintenance plays a crucial role in doing so.
 
-According to the \acl{IFR} (\acs{IFR}), the need for robotics is increasing every year, it is only natural to assume robots can clean and play an active part maintaining forests. Although there is not a widespread use of those robots yet some prototypes are already being developed \textcolor{red}{INSERT SOME ROBOTS}. Typically, these robots have large dimensions and low flexibility, some weigh more than a ton. Consequently, this movement constraint leads to a slow acquisition of data causing a bottleneck in an engineering project's typical workflow: design, develop, test and repeat, since it results in unnecessary delays between the development and testing phases.
+According to the \acl{IFR} (\acs{IFR}), the need for robotics is increasing every year, it is only natural to assume robots can clean and play an active part maintaining forests. Although there is not a widespread use of forestry robots yet some prototypes are already being developed \textcolor{red}{INSERT SOME ROBOTS}. Typically, these robots have large dimensions and low flexibility, some weigh more than a ton. Consequently, this movement constraint leads to a slow acquisition of data causing a bottleneck in an engineering project's typical workflow: design, develop, test and repeat, since it results in unnecessary delays between the development and testing phases.
 
 In short, wildfires are important to a healthy ecosystem but they need to be controlled to not damage populations and wildlife. The first step to increasing fire control is to clean the forest of dead organic matter, a task that can be performed by robots. As these robots are heavy, scientists and researchers find it difficult to obtain data directly from them, requiring a light system to record the necessary data to develop and test algorithms.
 
 \section{Context}
 
-This project is being developed under the Institute of Systems and Robots at the Coimbra University. It started with the SEMFIRE project, a project developed for/to ... And it is being developed with the intend of being used by the Forestry Robotics group in future works.
+This project is being developed at the Institute of Systems and Robots at the Coimbra University. It started with the SEMFIRE project, a project developed for/to ... And it is being developed with the intend of being used by the Forestry Robotics group in future works.
 
 \section{Objectives}
 In this work, we aim to design a rigid multisensory apparatus with an onboard computer to map forests. This apparatus combines multiple sensing technologies, such as 3D \acs{LiDAR}, depth cameras, infrared spectroscopy and \acl{IMU} (\acs{IMU}). With this apparatus, we will be able to collect datasets from forest environments, thus supporting forest operations, such as metric-semantic 3D mapping, combustible material identification, and forest cleaning. Aside from designing the apparatus, it is intended to integrate, test, and then compare state-of-the-art 3D mapping techniques based on the ROS middleware.
 
-\section{MoSCoW Analysis}
+\section{System Requirements}
 
 In order to create a system able to collect the necessary data in an quick and efficient way the following MoSCoW analysis was performed to easily understand the fundamental features of the project.
 
-\subsubsection*{The apparatus must have:}
-
 \begin{itemize}
-    \item A set of sensors that gather the following data
-    \item At least 2 hours of battery autonomy
-    \item Enough SSD space to record a 2 hour session 
-    \item Resistence to sustain temperatures fo 60degrees Celcius
-    \item Cooling solution that ensures the sensors don't go beyond their maximum operating temperature
-\end{itemize}
-
-\subsubsection*{The apparatus should have:}
-\begin{itemize}
-    \item Comfortable handling during an extended amount of time
-    \item Modularity
-\end{itemize}
-
-\subsubsection*{The apparatus could have:}
-\begin{itemize}
-    \item Easy access to the memory SSD
-    \item Easy battery replacement
-\end{itemize}
-
-\subsubsection*{The apparatus won't have:}
-\begin{itemize}
-    \item Instant visual feedback
-    \item Live \acl*{SLAM}
-    \item Weather resistance
+    \item \textbf{Must:}
+    \begin{itemize}
+        \item Have a set of sensors that gather the following data:
+        \begin{itemize}
+            \item GPS @...Hz
+            \item RGB image @...Hz
+            \item InfraRed @...Hz
+            \item Depth image @...Hz
+            \item Orientation @...Hz
+            \item Acceleration @...Hz
+        \end{itemize}
+        \item Have at least 2 hours of battery autonomy.
+        \item Be able to continuously function during a time period of at least 2 hours.
+        \item Employ a cooling solution that ensures the sensors don't go beyond their maximum operating temperature and the body can widthstand temperatures of 60degrees Celsius.
+    \end{itemize}
+    \item \textbf{Should:}
+    \begin{itemize}   
+        \item Be comfortable to handle during an extended amount of time
+        \item Be modular, both in software and hardware should be able of swapping sensors with relative ease.
+    \end{itemize}
+    \item \textbf{Could:}
+    \begin{itemize}   
+        \item Easy access to the memory SSD
+        \item Easy battery replacement
+    \end{itemize}
+    \item \textbf{Won't:}
+    \begin{itemize}
+        \item Have instant visual feedback
+        \item Have live \acl*{SLAM}
+        \item Be weather resistance, so it can only be used in sunny days
+    \end{itemize}
 \end{itemize}
 
 
