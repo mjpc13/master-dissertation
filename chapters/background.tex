@@ -5,23 +5,20 @@ This chapter introduces and explains the fundamentals to understand the rest of 
 From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence we faced the same problem as our ancestors: How do we map the environment and know our location within it? \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map continuously as the entity moves through space. This is a massive problem to tackle on and of extreme importance to achieve robot autonomy. A robot's autonomy is based on its understanding of its surrounding environment, which can be obtained through sensors. There are many types of sensors that are useful for this purpose, sensors such as:
 \textcolor{red}{EXPLAIN THESE SENSORS}
 \begin{itemize}
-    \item \acs*{LiDAR}
-    \item RGB-D cameras
-    \item \acs*{IMU}
-    \item \acs*{GPS}
+    \item \textbf{\acs*{LiDAR}s} cameras project infrared light into the environment and track the time it takes for the reflected light to return. By doing so, it is possible to calculate the distance between the camera and other objects. \acs*{LiDAR} has shrunk in size over the past decade and the cost was also dramatically reduced, making portable solutions possible.
+    \item \textbf{RGB-D} cameras add depth information to the RGB channels used in standard cameras, creating what is known as a 3D PointCloud. Although it also uses infrared light to compute depth information, it works differently than a \acs*{LiDAR}. Depth is calculated by projecting a grid of infrared points onto the environment; the farther away an object it, the wider the gap between the points is.
+    \item An \textbf{\acs*{IMU}} transforms the information of accelerometer, gyroscope, and magnetometer sensors into accurate pose data. The gyroscope provides information about the rotation and the accelerometer provides information on linear velocity and angular acceleration. Magnenometers are not included in every \acs*{IMU}, but those that do can also provide direction relative to the magnetic north.
+    \item \textbf{\acs*{GPS}} is a satellite-based navigation system that provides the latitude, longitude and altitude of an object on Earth.
 \end{itemize}
 
-\acs*{SLAM} could technically be split into two segments, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
+Having the sensory information about the world \acs*{SLAM} could technically be split into two segments, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
 
 \subsection{Localization}
 Localization can take two forms: relative or global. Relative localization, as the name suggests, creates a relation between two different poses (position and orientation). A pose's current state is usually determined by its last state. Information provided by global localization can be viewed independently of other positions.
 
 To compute relative localization it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s, to estimate change in pose over time.
 
-
 \todo[inline]{Talk about odometry, Visual odometry algorithms? ICP?}
-
-
 
 Many times sensor information is to noisy to be directly use as an input, which is a problem. A common way to solve this problem is to use a Kalman filter.
 
@@ -45,7 +42,15 @@ In real world it is uncommon to have a global linear system and due to it's line
 
 \subsection{Loop Closure}
 
+There is always some uncertainty and error associated with each measurement, thi is an essential principle. The sensors used to capture information of the real world are not exempt from this rule. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
+
+
+Loop closure identifies if the robot already pass through that location and if so, adapts the pose accordingly.
+
 \subsection{Moving Objects}
+
+Although desireble structures to map are static, identities that populates the world are not. The moving identities can be people in buildings, or animals in the forest. How can one distinguish between moving entities, that are not to be mapped and the statis objects that compose the environment?
+
 
 \section{\acs{ROS}}
 
@@ -60,7 +65,7 @@ It is no surprise that there are already a number of portable and light sensors 
 
 There exist multiple ways to scan a forest, Oveland et al. \cite{oveland_comparing_2018} compared three different ground LiDAR scanning implementations, namely, Handeld LiDAR, Backpack LiDAR (composed by two \acs*{LiDAR} perpendicular to each other) and Terrestial LiDAR. The authors compared the measurements of \acs*{DBH} to conclude that while the Terrestial LiDAR Scanners (a fixed system) is the most accurate, it fails to detect ocult areas. According to the authors the handheld LiDAR scanner has troubles in detecting smaller trees. Even tho the backpack LiDAR has the highest number of false trees, the authors still aknowledge as the most efficient method since it presents the highest amount of trees detected and low values for \acs*{RMS}.
 
-Talk about \cite{su_development_2021}
+\todo[inline]{Talk about \cite{su_development_2021}}
 
 Recently, Kui Xao developed a dual \acs*{LiDAR}s system, an \acs*{IMU}, and \acs*{GPS} for performing \acs*{SLAM} in multi-scene applications \cite{xiao_high-precision_2022}. To increase the vertical \acl*{FOV} (\acs*{FOV}), one of the \acs*{LiDAR}s was placed in the \textit{XY} plane while the other was positioned at -77.94° from the \textit{XY} plane. A timestamp synchronization algorithm is used by the authors to merge the data of the two \acs*{LiDAR}s. Secondly, the \acs*{LiDAR} data is tightly coupled with the IMU data in order to reduce noise caused by the inaccuracy of \acs*{LiDAR}-based odometry. In outdoor tests, the \acs*{IMU} calibration is improved by loosely coupling \acs*{GPS} to the \acs*{IMU} during outdoor tests.
 
