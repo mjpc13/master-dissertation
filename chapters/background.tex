@@ -21,36 +21,25 @@ The procedure of estimating a change in pose over time by using sensory informat
 Many times sensor information is too noisy to be directly use as an input, which is a problem. A common way to solve this problem is to use a Kalman filter.
 
 \subsubsection{Kalman Filter}
-The Kalman filter is a linear iterative process, as shown in Fig. \ref*{fig: flowchart kalman}, that uses consecutive data input to quickly converge to the true value and it is based on the Bayes Theorem (explanation in Annex \textcolor{red}{MAYBE ADD ANNEX EXPLAINING BAYES THEOREM and KF in detail???}). 
-
-In order to use the Kalman filter the following assumptions must be made: the process and measurements are linear with additive white Gaussian noise; providing the current system state makes the future state conditionally independent of the past states, known as the Markov property, and the prior probability follows a Gaussian Distribution. In each iteration of the Kalman Filter can be divided into two different steps: the Prediction and Update step. Essentially three values need to be computed: the Kalman gain, the estimate of the current state, and its uncertainty.
-The Kalman gain uses the previous uncertainty and the error in data. The Kalman Gain is a variable that represents the confidence one has in the observations and predictions made. The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate can be computed with the current estimate and kalman gain.
-
-\todo[inline]{To not make the dissertation extensive I don't provide many mathematical details in my explanation of the Kalman filter.}
+The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem, that uses consecutive data input to quickly converge to the true value. Each iteration involves computing three values: the Kalman gain, the current estimate, and its uncertainty. The Kalman gain uses the previous uncertainty and the error in data. The Kalman Gain is a variable that represents the confidence one has in the observations and predictions made.The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate is computed with the current estimate and kalman gain. Figure \ref*{fig: flowchart kalman} provides a simple graphical overview. A more complete explanation of the statistics envolved in the Kalman filter is provided in Annex. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{images/background/Kalman-diagram.pdf}
+    \includegraphics[width=0.6\linewidth]{images/background/Kalman-diagram.pdf}
     \caption{Simple flowchart of the Kalman Filter. \textcolor{red}{ADD REFERENCE}}
     \label{fig: flowchart kalman}
 \end{figure}
 
-
-In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in non-linear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method.
-
- A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation \footnote{The Unscened transform picks a few points from the distribution of the input variable that mantain the maximum knowledge on the initial distribution (also known as Sigma points), then is passes them through the nonlinear function and computes the mean and deviation of the output} to pass the normal distribution through the nonlinear function.
+In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in nonlinear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method. A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation\footnote{The Unscened transform picks a few points from the distribution of the input variable, then it passes them through the nonlinear function and computes the mean and standard deviation of the output. A complete explanation is given in Annex} to pass the normal distribution through the nonlinear function.
 
 \subsection{Loop Closure}
 
-
 As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
+\todo[inline]{Maybe talk briefly on some algorithms}
 
-Loop closure identifies if the robot already pass through that location and if so, adapts the pose accordingly.
+\section{Algorithms to perform \acs*{SLAM}}
 
-\subsection{Moving Objects}
-
-Although desireble structures to map are static, identities that populates the world are not. The moving identities can be people in buildings, or animals in the forest. How can one distinguish between moving entities, that are not to be mapped and the statis objects that compose the environment?
 
 
 \section{\acs{ROS}}
@@ -59,8 +48,11 @@ An effective robotics project cannot be achieved by just having sensors and phys
 
 Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. In robotics, it is considered the standard platform for developing complex projects.
 
+\subsection{Implementation of \acs*{SLAM} algorithms in \acs*{ROS}}
 
-\section{Data Acquisition Apparatus}
+
+
+\section{Related Data Acquisition Apparatus}
 
 It is no surprise that there are already a number of portable and light sensors designed to collect sensor data about the environment around us. There are several proprietary solutions available on the market for gathering sensory information for \acs*{SLAM}, but they tend to be expensive \cite{libackpack_C50}, \cite{libackpack_DGC50}. Additionally, there are some articles and research papers that have been conducted with the goal of building a system similar to the one proposed here. These works will be the ones to be focused on since the methodology, and results are readily available.
 
