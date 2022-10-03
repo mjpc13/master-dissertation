@@ -30,17 +30,36 @@ The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem,
     \label{fig: flowchart kalman}
 \end{figure}
 
-In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in nonlinear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method. A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation\footnote{The Unscened transform picks a few points from the distribution of the input variable, then it passes them through the nonlinear function and computes the mean and standard deviation of the output. A complete explanation is given in Annex} to pass the normal distribution through the nonlinear function.
+In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in nonlinear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method. A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation\footnote{The Unscened transform picks a few points from the distribution of the input variable, then it passes them through the nonlinear function and computes the mean and standard deviation of the output. A complete explanation is given in Annex}. An problem still remains, the noise is assumed to follow a gaussian distribution in every Kalman filter approach, which is not necessarely true. A alternative method, that works with non-Gaussian \acl*{PDF} (\acs*{PDF}) is the Particle Filters method.
+
+\subsubsection{Particle Filters}
+
+The Particle Filter is an iterative linear method is based on the Monte Carlo approach. Essentially, this method describes any complex \acs*{PDF} as a group of weigthed sample points. The higher density of points in a location, the higher the probability. The importance are computed based on the observations made and the previous state prediction, as shown in Figure XX.
+
+In each iteration three steps are taken: Prediction, Update and Resample.
+
+The weigth of each sample is calculated based on the observations made.
 
 \subsection{Loop Closure}
 
 As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
-\todo[inline]{Maybe talk briefly on some algorithms}
+\section{Classical algorithms to perform \acs*{SLAM}}
 
-\section{Algorithms to perform \acs*{SLAM}}
+\subsection{Filtering base SLAM}
+
+Filtering based \acs*{SLAM} employs the filtering techniques, described previously, namely Kalman Filters and Particle Filters. The \acs*{EKF} \acs*{SLAM} is one way to solve the \acs*{SLAM} problem using the previously explained \acl*{EKF}. As it uses the \acs*{EKF}, each map and pose must linearly dependent of the previous iteration and this is major shortcome. If the robot moves at a constant speed we can assume the change in pose to be linear. This will not be the case as the robot often accelerates, but if the acceleration is not abrupt the nonlinear system can succefully be approximated to linear by means of a first order Taylor expansion. The biggest drawback is the implied assumption of a static map. Moving entities in the environment will obviously not produce a close to linear dependency with succeful iterations and the first order Taylor expansion will not yield good results. 
 
 
+The FastSLAM algorithm uses particle filters to estimate the change in pose of the robot. By using Particle Filters, FastSLAM can handle nonlinear robot motion.
+
+
+Although it does not solve the necessary condition of having a static map, a \acs*{UKF} \acs*{SLAM} approach improves the accuracy model when the change in pose is hardly linear \cite{wang_upf-ukf_2007}. 
+
+In order to use Kalman filters we must assume the noise follows a Gaussian distribution, this is true for every variant of the method. 
+
+
+\subsection{Graph-based SLAM}
 
 \section{\acs{ROS}}
 
@@ -48,7 +67,7 @@ An effective robotics project cannot be achieved by just having sensors and phys
 
 Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. In robotics, it is considered the standard platform for developing complex projects.
 
-\subsection{Implementation of \acs*{SLAM} algorithms in \acs*{ROS}}
+\subsection{\acs*{SLAM} implementations in \acs*{ROS}}
 
 
 
