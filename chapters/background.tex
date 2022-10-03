@@ -2,28 +2,31 @@ This chapter introduces and explains the fundamentals to understand the rest of 
 
 \section{Fundamentals on \acl*{SLAM} (\acs*{SLAM})}
 
-From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence we faced the same problem as our ancestors: How do we map the environment and know our location within it? \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map continuously as the entity moves through space. This is a massive problem to tackle on and of extreme importance to achieve robot autonomy. A robot's autonomy is based on its understanding of its surrounding environment, which can be obtained through sensors. There are many types of sensors that are useful for this purpose, sensors such as:
-\textcolor{red}{EXPLAIN THESE SENSORS}
+From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence we faced the same problem as our ancestors: How do we map the environment and know our location within it? \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map continuously as the entity moves through space. This is a massive problem to tackle on and of extreme importance to achieve full robot autonomy. A robot's autonomy is based on its understanding of its surrounding environment, which can be obtained through sensors. There are many types of sensors that are useful for this purpose, sensors such as:
 \begin{itemize}
     \item \textbf{\acs*{LiDAR}s} cameras project infrared light into the environment and track the time it takes for the reflected light to return. By doing so, it is possible to calculate the distance between the camera and other objects. \acs*{LiDAR} has shrunk in size over the past decade and the cost was also dramatically reduced, making portable solutions possible.
     \item \textbf{RGB-D} cameras add depth information to the RGB channels used in standard cameras, creating what is known as a 3D PointCloud. Although it also uses infrared light to compute depth information, it works differently than a \acs*{LiDAR}. Depth is calculated by projecting a grid of infrared points onto the environment; the farther away an object it, the wider the gap between the points is.
-    \item An \textbf{\acs*{IMU}} transforms the information of accelerometer, gyroscope, and magnetometer sensors into accurate pose data. The gyroscope provides information about the rotation and the accelerometer provides information on linear velocity and angular acceleration. Magnenometers are not included in every \acs*{IMU}, but those that do can also provide direction relative to the magnetic north.
+    \item \textbf{\acs*{IMU}} transforms the information of accelerometer, gyroscope, and magnetometer sensors into accurate pose data. The gyroscope provides information about the rotation and the accelerometer provides information on linear velocity and angular acceleration. Magnenometers are not included in every \acs*{IMU}, but those that do can also provide direction relative to the magnetic north.
     \item \textbf{\acs*{GPS}} is a satellite-based navigation system that provides the latitude, longitude and altitude of an object on Earth.
 \end{itemize}
 
-Having the sensory information about the world \acs*{SLAM} could technically be split into two segments, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
+Gather sensory information on the outside world is the first step, now \acs*{SLAM} could technically be split into two main problems, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
 
 \subsection{Localization}
-Localization can take two forms: relative or global. Relative localization, as the name suggests, creates a relation between two different poses (position and orientation). A pose's current state is usually determined by its last state. Information provided by global localization can be viewed independently of other positions.
+Localization can take two forms: global or relative. 
+Global localization gives the position in a global reference (for instance the Earth). Information provided by global localization can be viewed independently of other positions. It is generally given by \acs*{GPS} in the form of longitude, latitude and altitude.
+Relative localization, as the name suggests, the current pose (position and orientation) is related to other pose. A pose's current state is usually determined by its last state. To compute relative localization it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s, to estimate change in pose over time.
+The procedure of estimating a change in pose over time by using sensory information is called odometry. Classical odometry is computed from motion sensors like \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms ( identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Deep Learning techniques such as XXX, YYY, ZZZ are also being used to perform Visual Odometry.
 
-To compute relative localization it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s, to estimate change in pose over time.
-
-\todo[inline]{Talk about odometry, Visual odometry algorithms? ICP?}
-
-Many times sensor information is to noisy to be directly use as an input, which is a problem. A common way to solve this problem is to use a Kalman filter.
+Many times sensor information is too noisy to be directly use as an input, which is a problem. A common way to solve this problem is to use a Kalman filter.
 
 \subsubsection{Kalman Filter}
-The Kalman filter is a linear iterative process, as shown in Fig. \ref*{fig: flowchart kalman}, that uses consecutive data input to quickly converge to the true value. Each iteration involves computing three values: the Kalman gain, the current estimate, and its uncertainty. The Kalman gain uses the previous uncertainty and the error in data. The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate is computed with the current estimate and kalman gain.
+The Kalman filter is a linear iterative process, as shown in Fig. \ref*{fig: flowchart kalman}, that uses consecutive data input to quickly converge to the true value and it is based on the Bayes Theorem (explanation in Annex \textcolor{red}{MAYBE ADD ANNEX EXPLAINING BAYES THEOREM and KF in detail???}). 
+
+In order to use the Kalman filter the following assumptions must be made: the process and measurements are linear with additive white Gaussian noise; providing the current system state makes the future state conditionally independent of the past states, known as the Markov property, and the prior probability follows a Gaussian Distribution. In each iteration of the Kalman Filter can be divided into two different steps: the Prediction and Update step. Essentially three values need to be computed: the Kalman gain, the estimate of the current state, and its uncertainty.
+The Kalman gain uses the previous uncertainty and the error in data. The Kalman Gain is a variable that represents the confidence one has in the observations and predictions made. The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate can be computed with the current estimate and kalman gain.
+
+\todo[inline]{To not make the dissertation extensive I don't provide many mathematical details in my explanation of the Kalman filter.}
 
 \begin{figure}[H]
     \centering
@@ -33,16 +36,14 @@ The Kalman filter is a linear iterative process, as shown in Fig. \ref*{fig: flo
 \end{figure}
 
 
-In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in non-linear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is what the method the \acl{EKF} \acs*{EKF} deploy.
+In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in non-linear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method.
 
-
- A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}).
-
- \subsection{Mapping}
+ A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation \footnote{The Unscened transform picks a few points from the distribution of the input variable that mantain the maximum knowledge on the initial distribution (also known as Sigma points), then is passes them through the nonlinear function and computes the mean and deviation of the output} to pass the normal distribution through the nonlinear function.
 
 \subsection{Loop Closure}
 
-There is always some uncertainty and error associated with each measurement, thi is an essential principle. The sensors used to capture information of the real world are not exempt from this rule. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
+
+As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
 
 Loop closure identifies if the robot already pass through that location and if so, adapts the pose accordingly.
