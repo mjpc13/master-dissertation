@@ -5,7 +5,7 @@ This chapter introduces and explains the fundamentals to understand the rest of 
 From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence we faced the same problem as our ancestors: How do we map the environment and know our location within it? \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map continuously as the entity moves through space. This is a massive problem to tackle on and of extreme importance to achieve full robot autonomy. A robot's autonomy is based on its understanding of its surrounding environment, which can be obtained through sensors. There are many types of sensors that are useful for this purpose, sensors such as:
 \begin{itemize}
     \item \textbf{\acs*{LiDAR}s} cameras project infrared light into the environment and track the time it takes for the reflected light to return. By doing so, it is possible to calculate the distance between the camera and other objects. \acs*{LiDAR} has shrunk in size over the past decade and the cost was also dramatically reduced, making portable solutions possible.
-    \item \textbf{RGB-D} cameras add depth information to the RGB channels used in standard cameras, creating what is known as a 3D PointCloud. Although it also uses infrared light to compute depth information, it works differently than a \acs*{LiDAR}. Depth is calculated by projecting a grid of infrared points onto the environment; the farther away an object it, the wider the gap between the points is.
+    \item \textbf{RGB-D} cameras add depth information to the RGB channels used in standard cameras. Although it also uses infrared light to compute depth information, it works differently than a \acs*{LiDAR}. Depth is calculated by projecting a grid of infrared points onto the environment; the farther away an object it, the wider the gap between the points is.
     \item \textbf{\acs*{IMU}} transforms the information of accelerometer, gyroscope, and magnetometer sensors into accurate pose data. The gyroscope provides information about the rotation and the accelerometer provides information on linear velocity and angular acceleration. Magnenometers are not included in every \acs*{IMU}, but those that do can also provide direction relative to the magnetic north.
     \item \textbf{\acs*{GPS}} is a satellite-based navigation system that provides the latitude, longitude and altitude of an object on Earth.
 \end{itemize}
@@ -13,8 +13,7 @@ From the beginning of civilization, mapping the surroundings has been a key conc
 Gather sensory information on the outside world is the first step, now \acs*{SLAM} could technically be split into two main problems, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
 
 \subsection{Localization}
-Localization can take two forms: global or relative. 
-Global localization gives the position in a global reference (for instance the Earth). Information provided by global localization can be viewed independently of other positions. It is generally given by \acs*{GPS} in the form of longitude, latitude and altitude.
+Localization can take two forms: global or relative. Global localization gives the position in a global reference. Information provided by global localization can be viewed independently of other positions.
 Relative localization, as the name suggests, the current pose (position and orientation) is related to other pose. A pose's current state is usually determined by its last state. To compute relative localization it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s, to estimate change in pose over time.
 The procedure of estimating a change in pose over time by using sensory information is called odometry. Classical odometry is computed from motion sensors like \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms ( identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Deep Learning techniques such as XXX, YYY, ZZZ are also being used to perform Visual Odometry.
 
@@ -30,15 +29,11 @@ The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem,
     \label{fig: flowchart kalman}
 \end{figure}
 
-In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in nonlinear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method. A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation\footnote{The Unscened transform picks a few points from the distribution of the input variable, then it passes them through the nonlinear function and computes the mean and standard deviation of the output. A complete explanation is given in Annex}. An problem still remains, the noise is assumed to follow a gaussian distribution in every Kalman filter approach, which is not necessarely true. A alternative method, that works with non-Gaussian \acl*{PDF} (\acs*{PDF}) is the Particle Filters method.
+In real world it is uncommon to have a global linear system and due to it's linearity, the Kalman Filter won't work well in nonlinear scenarious. A simple way to solve this is to make the global nonlinear function, locally linear, using a first order Taylor Expansion to do the aproximation. This is the approach taken by the \acl{EKF} (\acs*{EKF}) method. A more accurate way to solve the problem is to use a \acl*{UKF} (\acs*{UKF}). Instead of linearizing the original function, the \acs*{UKF} uses an Unscented Transformation\footnote{The Unscened transform picks a few points from the distribution of the input variable, then it passes them through the nonlinear function and computes the mean and standard deviation of the output. A complete explanation is given in Annex}. A problem still remains, the noise is assumed to follow a gaussian distribution in every Kalman filter approach, which is not necessarely true. A alternative method, that works with non-Gaussian \acl*{PDF} (\acs*{PDF}) is the Particle Filters method.
 
 \subsubsection{Particle Filters}
 
-The Particle Filter is an iterative linear method is based on the Monte Carlo approach. Essentially, this method describes any complex \acs*{PDF} as a group of weigthed sample points. The higher density of points in a location, the higher the probability. The importance are computed based on the observations made and the previous state prediction, as shown in Figure XX.
-
-In each iteration three steps are taken: Prediction, Update and Resample.
-
-The weigth of each sample is calculated based on the observations made.
+The Particle Filter is an iterative linear method is based on the Monte Carlo approach. Essentially, this method describes any complex \acs*{PDF} as a group sample points. The sample points can be see as guesses of the true value. The higher density of points in a location, the higher the probability. The weigth is then computed based on the observations made and finally a resample is made to discard low probability points.
 
 \subsection{Loop Closure}
 
@@ -48,15 +43,17 @@ As mentioned before, sensors used to capture information of the real world have 
 
 \subsection{Filtering base SLAM}
 
-Filtering based \acs*{SLAM} employs the filtering techniques, described previously, namely Kalman Filters and Particle Filters. The \acs*{EKF} \acs*{SLAM} is one way to solve the \acs*{SLAM} problem using the previously explained \acl*{EKF}. As it uses the \acs*{EKF}, each map and pose must linearly dependent of the previous iteration and this is major shortcome. If the robot moves at a constant speed we can assume the change in pose to be linear. This will not be the case as the robot often accelerates, but if the acceleration is not abrupt the nonlinear system can succefully be approximated to linear by means of a first order Taylor expansion. The biggest drawback is the implied assumption of a static map. Moving entities in the environment will obviously not produce a close to linear dependency with succeful iterations and the first order Taylor expansion will not yield good results. 
+Filtering based \acs*{SLAM} employs the filtering techniques described previously, namely Kalman Filters and Particle Filters. The \acs*{EKF} \acs*{SLAM} is one way to solve the \acs*{SLAM} problem using the previously explained \acl*{EKF}. As it uses the \acs*{EKF}, each map and pose must linearly dependent of the previous iteration and this is major shortcome. If the robot moves at a constant speed we can assume the change in pose to be linear. This will not be the case as the robot often accelerates, but if the acceleration is not abrupt the nonlinear system will be succefully be approximated to linear by means of a first order Taylor expansion. The biggest drawback is the implied assumption of a static map. Moving entities in the environment will obviously not produce a close to linear dependency with succeful iterations, therefor the first order Taylor expansion will not yield good results. 
 
 
-The FastSLAM algorithm uses particle filters to estimate the change in pose of the robot. By using Particle Filters, FastSLAM can handle nonlinear robot motion.
-
-
-Although it does not solve the necessary condition of having a static map, a \acs*{UKF} \acs*{SLAM} approach improves the accuracy model when the change in pose is hardly linear \cite{wang_upf-ukf_2007}. 
-
-In order to use Kalman filters we must assume the noise follows a Gaussian distribution, this is true for every variant of the method. 
+The FastSLAM algorithm \cite{thrun_fastslam_nodate} uses particle filters to estimate the change in pose of the robot. The workflow of FastSLAM is the following:
+\begin{enumerate}
+    \item Cast particles and sample them from the motion model (as explained in the Particle Filters)
+    \item Use measurement data to update the landmarks with \acs*{EKF}
+    \item Perform the weigthing of sampled particles according to the current understanding of the map 
+    \item Resample the particles.
+\end{enumerate}
+By using Particle Filters, FastSLAM can handle nonlinear robot motion but is more computive intensive. Another advantage of using a Particle Filter to estimate the motion is the multiple system states that are kept in memory through the resampling process, that only discards the low probability states. There are also implementations which replace the \acs*{EKF} by the \acs*{UKF} method to update the landmarks \cite{wang_upf-ukf_2007}.
 
 
 \subsection{Graph-based SLAM}
