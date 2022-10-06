@@ -24,7 +24,7 @@ The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem,
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{images/background/Kalman-diagram.pdf}
+    \includegraphics[width=0.5\linewidth]{images/background/Kalman-diagram.pdf}
     \caption{Simple flowchart of the Kalman Filter. \textcolor{red}{ADD REFERENCE}}
     \label{fig: flowchart kalman}
 \end{figure}
@@ -35,13 +35,20 @@ In real world it is uncommon to have a global linear system and due to it's line
 
 The Particle Filter is an iterative linear method is based on the Monte Carlo approach. Essentially, this method describes any complex \acs*{PDF} as a group sample points. The sample points can be see as guesses of the true value. The higher density of points in a location, the higher the probability. The weigth is then computed based on the observations made and finally a resample is made to discard low probability points.
 
+\subsection{Mapping}
+
+\todo[inline]{Talk about landmarks, scan matching and etc...}
+
+\todo[inline]{Check the following}
+Maps  can  be  parametrized  as  a  set  of  spatially  located landmarks, by dense represen-tations  like  occupancy  grids,  surface  maps, or by raw sensor measurements
+
 \subsection{Loop Closure}
 
 As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
 \section{Classical algorithms to perform \acs*{SLAM}}
 
-\subsection{Filtering base SLAM}
+\subsection{Filter based}
 
 Filtering based \acs*{SLAM} employs the filtering techniques described previously, namely Kalman Filters and Particle Filters. The \acs*{EKF} \acs*{SLAM} is one way to solve the \acs*{SLAM} problem using the previously explained \acl*{EKF}. As it uses the \acs*{EKF}, each map and pose must linearly dependent of the previous iteration and this is major shortcome. If the robot moves at a constant speed we can assume the change in pose to be linear. This will not be the case as the robot often accelerates, but if the acceleration is not abrupt the nonlinear system will be succefully be approximated to linear by means of a first order Taylor expansion. The biggest drawback is the implied assumption of a static map. Moving entities in the environment will obviously not produce a close to linear dependency with succeful iterations, therefor the first order Taylor expansion will not yield good results. 
 
@@ -56,15 +63,28 @@ The FastSLAM algorithm \cite{thrun_fastslam_nodate} uses particle filters to est
 By using Particle Filters, FastSLAM can handle nonlinear robot motion but is more computive intensive. Another advantage of using a Particle Filter to estimate the motion is the multiple system states that are kept in memory through the resampling process, that only discards the low probability states. There are also implementations which replace the \acs*{EKF} by the \acs*{UKF} method to update the landmarks \cite{wang_upf-ukf_2007}.
 
 
-\subsection{Graph-based SLAM}
+\subsection{Graph-based}
+
+The graph-based \acs*{SLAM} technique, initially proposed by Lu and Milios et al. \cite{lu_globally_1997}, uses a graph-based approach, in which nodes represent poses or landmarks, while edges represent constraints between nodes, typically obtained from odometry or loop closure techniques, as illustrated in Fig. \ref*{fig: graph SLAM}. Unlike the filtering approach, the graph-based technique maintains knowledge on all gathered data and uncertainties are encoded in the graph. This approach divides \acs*{SLAM} into two main problems: graph construction (building the graph from sensory information, commonly known as front-end) and graph optimization (analysing and estimating the most likely global configuration of poses given the constraints, also known as back-end).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/background/graph_SLAM.png}
+    \caption{A pose-graph representation of \acs*{SLAM}. The circles represent the robot's poses, the solid lines are constrains derived from odometry and the dotted lines are from scan matching constrains \cite{lu_globally_1997}.}
+    \label{fig: graph SLAM}
+\end{figure}
+
+
+Every new pose introduces a new node into the graph with multiple constraints associated, the constrains can be divided into \textit{weak links} provided by odometry data and \textit{strong links} obtained from scan matching algorithms. These links can be viewed as elastic springs with different elastic constants \cite{lu_globally_1997}, the global graph optimizer will then find the lowest energy solution to the system, as it would in a real physical system. 
+
 
 \section{\acs{ROS}}
 
 An effective robotics project cannot be achieved by just having sensors and physical components; rather, one must have a clever communication system between sensors and processes. Although such complex systems can be built from scratch, it is not worthwhile when software like \acs*{ROS} is available.
 
-Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. In robotics, it is considered the standard platform for developing complex projects.
+Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS.% In robotics, it is considered the standard platform for developing complex projects.
 
-\subsection{\acs*{SLAM} implementations in \acs*{ROS}}
+\section{Comparison of \acs*{SLAM} implementations in \acs*{ROS}}
 
 
 
