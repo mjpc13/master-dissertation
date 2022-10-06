@@ -37,6 +37,7 @@ The Particle Filter is an iterative linear method is based on the Monte Carlo ap
 
 \subsection{Mapping}
 
+\todo[inline]{ICP}
 \todo[inline]{Talk about landmarks, scan matching and etc...}
 
 \todo[inline]{Check the following}
@@ -46,7 +47,7 @@ Maps  can  be  parametrized  as  a  set  of  spatially  located landmarks, by de
 
 As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
-\section{Classical algorithms to perform \acs*{SLAM}}
+\section{Classical \acs*{SLAM} algorithms}
 
 \subsection{Filter based}
 
@@ -82,10 +83,26 @@ Every new pose introduces a new node into the graph with multiple constraints as
 
 An effective robotics project cannot be achieved by just having sensors and physical components; rather, one must have a clever communication system between sensors and processes. Although such complex systems can be built from scratch, it is not worthwhile when software like \acs*{ROS} is available.
 
-Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS.% In robotics, it is considered the standard platform for developing complex projects.
+Although the name \acl*{ROS} suggests that ROS is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. Many of these libraries are open-source implementations of previously described \acs*{SLAM} techniques, these libraries will now be reviewd and compared.
 
-\section{Comparison of \acs*{SLAM} implementations in \acs*{ROS}}
 
+\section{Comparison of \acs*{SLAM} implementations}
+
+There are a multitude of open source imlementations of \acs*{SLAM}. Since one of the \textbf{Must} requirements is a well integrated system with the \acs*{ROS} platform, only \acs*{ROS} implementations will be reviewed. 
+
+One of the most popular implementations of \acs*{SLAM} is Real Time Appearance Based Mapping (RTAB-Map) \cite{labbe_rtab-map_2019}. RTAB-Map is a graph-based \acs*{SLAM} that uses loop closure detector and offers several options for the backend, namely GTSAM (default) \cite{gtsam}, g2o \cite{kummerle_g2o_2011} and TORO \cite{grisetti_nonlinear_2009}. It supports several sensors, namely \acs*{LiDAR} and RGB-D cameras. It uses \acs*{ICP} to collect \acs*{LiDAR} odometry and it also supports visual odometry. In order to ensure offline \acs*{SLAM}, RTAB-Map has a memory manager that keeps control of the amount of locations and landmarks used in the loop closure. RTAB-Map can generate 2D and 3D Occupancy grids.
+
+Cartographer is the Google's implementation to solve the \acs*{SLAM} challenge \cite{hess_real-time_2016}.
+
+
+\todo[inline]{Lio-SAM}
+\todo[inline]{Hector-SLAM}
+%\todo[inline]{RTAB-Map} kinda of done
+\todo[inline]{Cartographer}                
+\todo[inline]{EKF-LOAM}
+\todo[inline]{online-FGO}
+\todo[inline]{DAMS-LIO}
+ 
 
 
 \section{Related Data Acquisition Apparatus}

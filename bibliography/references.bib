@@ -271,6 +271,87 @@ type: article},
         pages = {31--43},
 }
 
+%RTAB-Map
+@article{labbe_rtab-map_2019,
+        title = {{RTAB}-{Map} as an open-source lidar and visual simultaneous localization and mapping library for large-scale and long-term online operation: {LABBÉ} {\textless}span style="font-variant:small-caps;"{\textgreater}and{\textless}/span{\textgreater} {MICHAUD}},
+        volume = {36},
+        issn = {15564959},
+        shorttitle = {{RTAB}-{Map} as an open-source lidar and visual simultaneous localization and mapping library for large-scale and long-term online operation},
+        url = {https://onlinelibrary.wiley.com/doi/10.1002/rob.21831},
+        doi = {10.1002/rob.21831},
+        abstract = {Distributed as an open source library since 2013, RTAB-Map started as an appearancebased loop closure detection approach with memory management to deal with large-scale and long-term online operation. It then grew to implement Simultaneous Localization and Mapping (SLAM) on various robots and mobile platforms. As each application brings its own set of contraints on sensors, processing capabilities and locomotion, it raises the question of which SLAM approach is the most appropriate to use in terms of cost, accuracy, computation power and ease of integration. Since most of SLAM approaches are either visual or lidar-based, comparison is diﬃcult. Therefore, we decided to extend RTAB-Map to support both visual and lidar SLAM, providing in one package a tool allowing users to implement and compare a variety of 3D and 2D solutions for a wide range of applications with diﬀerent robots and sensors. This paper presents this extended version of RTAB-Map and its use in comparing, both quantitatively and qualitatively, a large selection of popular real-world datasets (e.g., KITTI, EuRoC, TUM RGB-D, MIT Stata Center on PR2 robot), outlining strengths and limitations of visual and lidar SLAM conﬁgurations from a practical perspective for autonomous navigation applications.},
+        language = {en},
+        number = {2},
+        urldate = {2022-10-06},
+        journal = {Journal of Field Robotics},
+        author = {Labbé, Mathieu and Michaud, François},
+        month = mar,
+        year = {2019},
+        pages = {416--446},
+        file = {Labbé and Michaud - 2019 - RTAB-Map as an open-source lidar and visual simult.pdf:/home/mjpc13/Zotero/storage/QPA9PQVS/Labbé and Michaud - 2019 - RTAB-Map as an open-source lidar and visual simult.pdf:application/pdf},
+}
+
+%GTSAM
+@software{gtsam,
+  author       = {Frank Dellaert and Richard Roberts and Varun Agrawal and Alex Cunningham and Chris Beall and Duy-Nguyen Ta and Fan Jiang and lucacarlone and nikai and Jose Luis Blanco-Claraco and Stephen Williams and ydjian and John Lambert and Andy Melim and Zhaoyang Lv and Akshay Krishnan and Jing Dong and Gerry Chen and Krunal Chande and balderdash-devil and DiffDecisionTrees and Sungtae An and mpaluri and Ellon Paiva Mendes and Mike Bosse and Akash Patel and Ayush Baid and Paul Furgale and matthewbroadwaynavenio and roderick-koehle},
+  title        = {borglab/gtsam},
+  month        = may,
+  year         = 2022,
+  publisher    = {Zenodo},
+  version      = {4.2a7},
+  doi          = {10.5281/zenodo.5794541},
+  url          = {https://doi.org/10.5281/zenodo.5794541}
+}
+
+%g2o
+@inproceedings{kummerle_g2o_2011,
+        address = {Shanghai, China},
+        title = {G$^{\textrm{2}}$o: {A} general framework for graph optimization},
+        isbn = {978-1-61284-386-5},
+        shorttitle = {G$^{\textrm{2}}$o},
+        url = {http://ieeexplore.ieee.org/document/5979949/},
+        doi = {10.1109/ICRA.2011.5979949},
+        abstract = {Many popular problems in robotics and computer vision including various types of simultaneous localization and mapping (SLAM) or bundle adjustment (BA) can be phrased as least squares optimization of an error function that can be represented by a graph. This paper describes the general structure of such problems and presents g2o, an open-source C++ framework for optimizing graph-based nonlinear error functions. Our system has been designed to be easily extensible to a wide range of problems and a new problem typically can be speciﬁed in a few lines of code. The current implementation provides solutions to several variants of SLAM and BA. We provide evaluations on a wide range of real-world and simulated datasets. The results demonstrate that while being general g2o offers a performance comparable to implementations of stateof-the-art approaches for the speciﬁc problems.},
+        language = {en},
+        urldate = {2022-10-06},
+        booktitle = {2011 {IEEE} {International} {Conference} on {Robotics} and {Automation}},
+        publisher = {IEEE},
+        author = {Kummerle, Rainer and Grisetti, Giorgio and Strasdat, Hauke and Konolige, Kurt and Burgard, Wolfram},
+        month = may,
+        year = {2011},
+        pages = {3607--3613},
+        file = {Kummerle et al. - 2011 - G2o A general framework for graph opti.pdf:/home/mjpc13/Zotero/storage/7V4JT88B/Kummerle et al. - 2011 - G2o A general framework for graph opti.pdf:application/pdf},
+}
+
+%TORO
+@article{grisetti_nonlinear_2009,
+        title = {Nonlinear {Constraint} {Network} {Optimization} for {Efficient} {Map} {Learning}},
+        volume = {10},
+        issn = {1524-9050, 1558-0016},
+        url = {http://ieeexplore.ieee.org/document/5164927/},
+        doi = {10.1109/TITS.2009.2026444},
+        abstract = {Learning models of the environment is one of the fundamental tasks of mobile robots since maps are needed for a wide range of robotic applications, such as navigation and transportation tasks, service robotic applications, and several others. In the past, numerous efﬁcient approaches to map learning have been proposed. Most of them, however, assume that the robot lives on a plane. In this paper, we present a highly efﬁcient maximum likelihood approach that is able to solve 3D as well as 2D problems. Our approach addresses the so-called graph-based formulation of the simultaneous localization and mapping (SLAM) and can be seen as an extension of Olson’s algorithm [27] towards non-ﬂat environments. It applies a novel parameterization of the nodes of the graph that signiﬁcantly improves the performance of the algorithm and can cope with arbitrary network topologies. The latter allows us to bound the complexity of the algorithm to the size of the mapped area and not to the length of the trajectory. Furthermore, our approach is able to appropriately distribute the roll, pitch and yaw error over a sequence of poses in 3D mapping problems. We implemented our technique and compared it to multiple other graph-based SLAM solutions. As we demonstrate in simulated and in real world experiments, our method converges faster than the other approaches and yields accurate maps of the environment.},
+        language = {en},
+        number = {3},
+        urldate = {2022-10-06},
+        journal = {IEEE Transactions on Intelligent Transportation Systems},
+        author = {Grisetti, G. and Stachniss, C. and Burgard, W.},
+        month = sep,
+        year = {2009},
+        pages = {428--439},
+        file = {Grisetti et al. - 2009 - Nonlinear Constraint Network Optimization for Effi.pdf:/home/mjpc13/Zotero/storage/3QW9EC6W/Grisetti et al. - 2009 - Nonlinear Constraint Network Optimization for Effi.pdf:application/pdf},
+}
+
+%Cartographer
+@inproceedings{hess_real-time_2016,
+        title = {Real-{Time} {Loop} {Closure} in {2D} {LIDAR} {SLAM}},
+        booktitle = {2016 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+        author = {Hess, Wolfgang and Kohler, Damon and Rapp, Holger and Andor, Daniel},
+        year = {2016},
+        pages = {1271--1278},
+        file = {Full Text PDF:/home/mjpc13/Zotero/storage/PQTBZCM9/Hess et al. - 2016 - Real-Time Loop Closure in 2D LIDAR SLAM.pdf:application/pdf},
+}
+
 %=============================================
 % 		RELATED WORK
 %=============================================
