@@ -75,8 +75,7 @@ The graph-based \acs*{SLAM} technique, initially proposed by Lu and Milios et al
     \label{fig: graph SLAM}
 \end{figure}
 
-
-Every new pose introduces a new node into the graph with multiple constraints associated, the constrains can be divided into \textit{weak links} provided by odometry data and \textit{strong links} obtained from scan matching algorithms. These links can be viewed as elastic springs with different elastic constants \cite{lu_globally_1997}, the global graph optimizer will then find the lowest energy solution to the system, as it would in a real physical system. 
+Every new pose introduces a new node into the graph with multiple constraints associated, the constrains can be divided into \textit{weak links} provided by odometry data and \textit{strong links} obtained from scan matching algorithms. These links can be viewed as elastic springs with different elastic constants \cite{lu_globally_1997}, the global graph optimizer will then find the lowest energy solution to the system, as it would in a real physical system. To put it simply, the frontend is responsible for generation of accurate submaps, while the backend ensures they are consistently correlated.
 
 
 \section{\acs{ROS}}
@@ -92,14 +91,17 @@ There are a multitude of open source imlementations of \acs*{SLAM}. Since one of
 
 One of the most popular implementations of \acs*{SLAM} is Real Time Appearance Based Mapping (RTAB-Map) \cite{labbe_rtab-map_2019}. RTAB-Map is a graph-based \acs*{SLAM} that uses loop closure detector and offers several options for the backend, namely GTSAM (default) \cite{gtsam}, g2o \cite{kummerle_g2o_2011} and TORO \cite{grisetti_nonlinear_2009}. It supports several sensors, namely \acs*{LiDAR} and RGB-D cameras. It uses \acs*{ICP} to collect \acs*{LiDAR} odometry and it also supports visual odometry. In order to ensure offline \acs*{SLAM}, RTAB-Map has a memory manager that keeps control of the amount of locations and landmarks used in the loop closure. RTAB-Map can generate 2D and 3D Occupancy grids.
 
-Cartographer is the Google's implementation to solve the \acs*{SLAM} challenge \cite{hess_real-time_2016}.
+Several \acs*{LiDAR} based method derive from \acl*{LOAM}, commonly known as \acs*{LOAM}. Implementations based on \acs*{LOAM} usually obtain both odometry and mapping from \acs*{LiDAR}. Although it can create high accuracy maps, the maps are static and it usually perform poorly in places with fewer landmarks, like long corridors. The LeGO-LOAM add two aditional modules to the \acs*{LOAM} technique: pointcloud segmentation and denoising and feature extraction. These extra components allow to filter out dinamic entities but it does not improve the performance when the environment has few features to be extracted. To help improving the performance, researchers started to implement an \acs*{IMU} to the system, firstly in a loosely coupled faction \textcolor{red}{INSERT REF} and then a more accurate tighly coupled approach was used in LIO-Mapping. As it was very computed intensive to take all sensory data, the authors in \textcolor{red}{INSERT REF} sugested a \acl*{LIO-SAM} (\acs*{LIO-SAM}).
+
+Cartographer is the Google's implementation to solve the \acs*{SLAM} challenge \cite{hess_real-time_2016}. It is another \acs*{LiDAR} based graph \acs*{SLAM} divided into two main components: local \acs*{SLAM} (the front end) and global \acs*{SLAM} (the backend). This approach takes input of range finding sensor, like \acs*{LiDAR}, and applies a bandpass filter to the input data. \acs*{IMU} can also be used to help figuring out the robot rotation and to provide information on gravity direction, that is used in the 3D variant. 
 
 
-\todo[inline]{Lio-SAM}
-\todo[inline]{Hector-SLAM}
+%\todo[inline]{EKF-LOAM}
+\todo[inline]{LIO-SAM}
+\todo[inline]{Hector-SLAM \cite{kohlbrecher_flexible_2011}}
+\todo[inline]{Gmapping \cite{grisetti_improved_2007}}
 %\todo[inline]{RTAB-Map} kinda of done
-\todo[inline]{Cartographer}                
-\todo[inline]{EKF-LOAM}
+%\todo[inline]{Cartographer}
 \todo[inline]{online-FGO}
 \todo[inline]{DAMS-LIO}
  
