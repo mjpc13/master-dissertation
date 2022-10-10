@@ -9,16 +9,27 @@ There are two different philosophies in statistics: the Classic and Bayesian. Mo
 
 Every sensor measure is noisy, so each measurement has an associated uncertainty. A common way to represent this noise is through a Gaussian or Normal distribution, which follows the following equation.
 
-
+\begin{equation}
+    g(x) = \frac{1}{\sigma\sqrt{2\pi}}\exp(-\frac{1}{2}\times\frac{(x - \mu)^2}{\sigma^2})
+\end{equation}
 
 \todo[inline]{Explain in 1 sentence what is a PDF}
 The \acl*{PDF} for a Normal distribution takes the following shape:
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/statistics/Normal_Distribution_PDF.png}
+    \caption{Normalized Gaussian curves with expected value $\mu$ and variance $\sigma^2$ \cite{enwiki:1100476982}}
+    \label{fig: normal pdf}
+\end{figure}
+
 \todo[inline]{Include the picture of a gaussian distribution}
 
-An interesting property of a Gaussian random variables is that they can be passed through a linear function and the output will also result in a gaussian variable. The result will have a different mean and \acs*{STD}. This \textbf{will not hold} for nonlinear functions. One has two different ways to solve the problem for passing a random variable through a nonlinear. The first is to locally linearize with the first order Taylor Expansion:
+An interesting property of a Gaussian random variables is that they can be passed through a linear function and the output will also result in a gaussian variable. The result will have a different mean and \acs*{STD}. This \textbf{will not hold} for nonlinear functions. One has two different ways to solve the problem for passing a random variable through a nonlinear. The first is to locally linearize with the first order Taylor Expansion Series:
 
-\todo[inline]{Insert Taylor function}
+\begin{equation}
+    T(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x-a)^n
+\end{equation}
 
 \todo[inline]{Insert image of a function and Taylor Expansion}
 
