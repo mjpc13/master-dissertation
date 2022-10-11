@@ -1,26 +1,27 @@
-This chapter introduces and explains the fundamentals to understand the rest of the this disseration. Related work is also reviewed and directly compared against the proposed project.
+%This chapter introduces and explains the fundamentals to understand the rest of the this disseration. Firstly, Mapping and Localization technologies are explored and then an explanation on to use them in \acs*{SLAM} is provided. Finaly, several \acs*{SLAM} implementations and related works are discussed and compared.
 
-\section{Fundamentals on \acl*{SLAM} (\acs*{SLAM})}
+From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence, the problem our ancestors faced is currently being tackle in robotics: How do we map the environment and know our location within it? This is a massive problem to tackle on and of extreme importance to achieve full robot autonomy. In a simple approach, depth sensor in a static platform is enought to map the surroundings, this is the base platform of the taxometry chart presented in Figure \ref*{fig: taxonomy graph}. At this level localization is not needed, but the amount of uses in real world are skew. The next level presents a localization component, this allows the usage of mobile robot's to map the environment. If the localization information is correct, very precise and without any uncertainty associated this would be enough to generate an accurate map. However, this scenario is not reallistic. The upper level there is a two way communication between the mapping and localization, this is often refered as \acl*{SLAM}. \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map and localization simultaneously and continuously as the entity moves through space.
 
-From the beginning of civilization, mapping the surroundings has been a key concept for navigating the environment. In essence we faced the same problem as our ancestors: How do we map the environment and know our location within it? \acs*{SLAM} is the challenge of mapping the local environment of a moving entity (e.g. robot) and updating the map continuously as the entity moves through space. This is a massive problem to tackle on and of extreme importance to achieve full robot autonomy. A robot's autonomy is based on its understanding of its surrounding environment, which can be obtained through sensors. There are many types of sensors that are useful for this purpose, sensors such as:
-\begin{itemize}
-    \item \textbf{\acs*{LiDAR}s} cameras project infrared light into the environment and track the time it takes for the reflected light to return. By doing so, it is possible to calculate the distance between the camera and other objects. \acs*{LiDAR} has shrunk in size over the past decade and the cost was also dramatically reduced, making portable solutions possible.
-    \item \textbf{RGB-D} cameras add depth information to the RGB channels used in standard cameras. Although it also uses infrared light to compute depth information, it works differently than a \acs*{LiDAR}. Depth is calculated by projecting a grid of infrared points onto the environment; the farther away an object it, the wider the gap between the points is.
-    \item \textbf{\acs*{IMU}} transforms the information of accelerometer, gyroscope, and magnetometer sensors into accurate pose data. The gyroscope provides information about the rotation and the accelerometer provides information on linear velocity and angular acceleration. Magnenometers are not included in every \acs*{IMU}, but those that do can also provide direction relative to the magnetic north.
-    \item \textbf{\acs*{GPS}} is a satellite-based navigation system that provides the latitude, longitude and altitude of an object on Earth.
-\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth]{images/background/mapping taxo.pdf}
+    \caption{Mapping taxonomy graph}
+    \label{fig: taxonomy graph}
+\end{figure}
 
-Gather sensory information on the outside world is the first step, now \acs*{SLAM} could technically be split into two main problems, one that is mapping and the other localization. Although it is possible to know the localization without knowledge of the map, there will always be some localization information needed when mapping an environment, unless the entity has a fixed position.
 
-\subsection{Localization}
+\section{Mapping}
+
+Maps in robotics are usually represented either metrically or topologically. The information on topological maps is presented in the form of a graph that contains all of the important landmarks, while in the metric portrayal a dense representation is used. The two different representations are shown in Figure \textcolor{red}{INSERT IMAGE WITH THE 2 DIFFERENT MAPS}. Metric maps can be represented with with raw sensor measurements or occupancy grids, the latter is more common. In occupancy grids, each cell holds the probability that the space in that cell is currently occupied. As the cell value increases, the likelihood of that space being occupied also increases. The resolution of the map will be determined by the size of the grid, therefore to generate a precise map, one must have large dedicated memory space, which presents an inconvenience and this is the most significant drawback of metric maps. Octomap is a popular 3D mapping framework to generate occupancy grids based on depth information \cite{hornung_octomap_2013}. Octomap uses octrees\footnote{An octree is a tree data struture in which each internal node is subdivided in eight children until the structure resolution is met.} to help reduce the memory space of rendering a map since large spaces with equal values can be represent with a single parent node.
+
+\section{Localization}
 Localization can take two forms: global or relative. Global localization gives the position in a global reference. Information provided by global localization can be viewed independently of other positions.
-Relative localization, as the name suggests, the current pose (position and orientation) is related to other pose. A pose's current state is usually determined by its last state. To compute relative localization it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s, to estimate change in pose over time.
-The procedure of estimating a change in pose over time by using sensory information is called odometry. Classical odometry is computed from motion sensors like \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms ( identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Deep Learning techniques such as XXX, YYY, ZZZ are also being used to perform Visual Odometry.
+Relative localization, as the name suggests, the current pose (position and orientation) is related to other pose. A pose's current state is usually determined by its last state. To estimate change in poses over time it is common to use data from motion sensors, such as wheel encoders and \acs*{IMU}s. The procedure of estimating a change in pose over time by using sensory information is called odometry. Classical odometry is computed from motion sensors such as \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms (identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Liu et al. \cite{liu_visual_2021} developed a Visual Odometry algorithm based on Deep Learning techniques. Another way to acquire odometry is by using \acs*{LiDAR}s and a scan matching algorithm like the \acl*{ICP} method (\acs*{ICP}).
 
 Many times sensor information is too noisy to be directly use as an input, which is a problem. A common way to solve this problem is to use a Kalman filter.
 
 \subsubsection{Kalman Filter}
-The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem, that uses consecutive data input to quickly converge to the true value. Each iteration involves computing three values: the Kalman gain, the current estimate, and its uncertainty. The Kalman gain uses the previous uncertainty and the error in data. The Kalman Gain is a variable that represents the confidence one has in the observations and predictions made.The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate is computed with the current estimate and kalman gain. Figure \ref*{fig: flowchart kalman} provides a simple graphical overview. A more complete explanation of the statistics envolved in the Kalman filter is provided in Annex. 
+The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem, that uses consecutive data input to quickly converge to the true value. Each iteration involves computing three values: the Kalman gain, the current estimate, and its uncertainty. The estimate of the current iteration is computed with the new data input and the previous estimation, where the weight of each component is decided by the kalman gain. Once the current estimate has been calculated, the new uncertainty of the estimate is computed. One can think of the Kalman Gain as a variable that represents the confidence one has in the observations and predictions made. Figure \ref*{fig: flowchart kalman} provides a simple graphical overview of this process. A more complete explanation of the statistics envolved in the Kalman filter is provided in Annex. 
 
 \begin{figure}[H]
     \centering
@@ -35,21 +36,15 @@ In real world it is uncommon to have a global linear system and due to it's line
 
 The Particle Filter is an iterative linear method is based on the Monte Carlo approach. Essentially, this method describes any complex \acs*{PDF} as a group sample points. The sample points can be see as guesses of the true value. The higher density of points in a location, the higher the probability. The weigth is then computed based on the observations made and finally a resample is made to discard low probability points.
 
-\subsection{Mapping}
 
-\todo[inline]{ICP}
-\todo[inline]{Talk about landmarks, scan matching and etc...}
+\section{Fundamentals on \acl*{SLAM} (\acs*{SLAM})}
 
-\todo[inline]{Check the following}
-Maps  can  be  parametrized  as  a  set  of  spatially  located landmarks, by dense represen-tations  like  occupancy  grids,  surface  maps, or by raw sensor measurements
+Now that both localization and mapping were reviewd, the techniques to merge them together in \acs*{SLAM} can be presented. As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. 
+\todo[inline]{Maybe talk here how to fuse locailzation with mapping}
 
-\subsection{Loop Closure}
+A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
 
-As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A periodic reset of the pose error would greatly improve the system. Essentially, Loop Closure achieves this goal.
-
-\section{Classical \acs*{SLAM} algorithms}
-
-\subsection{Filter based}
+\subsection{Filter based \acs*{SLAM}}
 
 Filtering based \acs*{SLAM} employs the filtering techniques described previously, namely Kalman Filters and Particle Filters. The \acs*{EKF} \acs*{SLAM} is one way to solve the \acs*{SLAM} problem using the previously explained \acl*{EKF}. As it uses the \acs*{EKF}, each map and pose must linearly dependent of the previous iteration and this is major shortcome. If the robot moves at a constant speed we can assume the change in pose to be linear. This will not be the case as the robot often accelerates, but if the acceleration is not abrupt the nonlinear system will be succefully be approximated to linear by means of a first order Taylor expansion. The biggest drawback is the implied assumption of a static map. Moving entities in the environment will obviously not produce a close to linear dependency with succeful iterations, therefor the first order Taylor expansion will not yield good results. 
 
@@ -57,7 +52,7 @@ Filtering based \acs*{SLAM} employs the filtering techniques described previousl
 The FastSLAM algorithm \cite{thrun_fastslam_nodate} uses particle filters to estimate the change in pose of the robot. By using Particle Filters, FastSLAM can handle nonlinear robot motion but it is more computive intensive. Another advantage of using a Particle Filter to estimate the motion is the multiple system states that are kept in memory through the resampling process, that only discards the low probability states. There are also implementations which replace the \acs*{EKF} by the \acs*{UKF} method to update the landmarks \cite{wang_upf-ukf_2007}.
 
 
-\subsection{Graph-based}
+\subsection{Graph-based \acs*{SLAM}}
 
 The graph-based \acs*{SLAM} technique, initially proposed by Lu and Milios et al. \cite{lu_globally_1997}, uses a graph-based approach, in which nodes represent poses or landmarks, while edges represent constraints between nodes, typically obtained from odometry or loop closure techniques, as illustrated in Fig. \ref*{fig: graph SLAM}. Unlike the filtering approach, the graph-based technique maintains knowledge on all gathered data and uncertainties are encoded in the graph. This approach divides \acs*{SLAM} into two main problems: graph construction (building the graph from sensory information, commonly known as front-end) and graph optimization (analysing and estimating the most likely global configuration of poses given the constraints, also known as back-end).
 
@@ -82,24 +77,20 @@ Although the name \acl*{ROS} suggests that ROS is an operating system, this is n
 
 There are a multitude of open source implementations of \acs*{SLAM}. Since one of the \textbf{Must} requirements is a well integrated system with the \acs*{ROS} platform, only \acs*{ROS} implementations will be reviewed. 
 
-One of the most popular implementations of \acs*{SLAM} is Real Time Appearance Based Mapping (RTAB-Map) \cite{labbe_rtab-map_2019}. RTAB-Map is a graph-based \acs*{SLAM} that uses loop closure detector and offers several options for the backend, namely GTSAM (default) \cite{gtsam}, g2o \cite{kummerle_g2o_2011} and TORO \cite{grisetti_nonlinear_2009}. It supports several sensors, namely \acs*{LiDAR} and RGB-D cameras. It uses \acs*{ICP} to collect \acs*{LiDAR} odometry and it also supports visual odometry. In order to ensure offline \footnote{In literature, real-time \acs*{SLAM} is referred to as offline \acs*{SLAM} and heavy implementations that are not meant to run in real-time are referred as online \acs*{SLAM}} \acs*{SLAM}, RTAB-Map has a memory manager that keeps control of the amount of locations and landmarks used in the loop closure. RTAB-Map can generate 2D and 3D Occupancy grids.
+One of the most popular implementations of \acs*{SLAM} is Real Time Appearance Based Mapping (RTAB-Map) \cite{labbe_rtab-map_2019}. RTAB-Map \footnote{The \acs*{ROS} implementation can be found at \url{https://github.com/introlab/rtabmap}} is a graph-based \acs*{SLAM} that uses loop closure detector and offers several options for the backend, namely GTSAM (default) \cite{gtsam}, g2o \cite{kummerle_g2o_2011} and TORO \cite{grisetti_nonlinear_2009}. It supports several sensors, namely \acs*{LiDAR} and RGB-D cameras. It can gather odometry from \acs*{LiDAR} information with the \acs*{ICP} method and uses \acs*{ICP} to collect \acs*{LiDAR} odometry and it also supports visual odometry. In order to ensure offline \footnote{In literature, real-time \acs*{SLAM} is referred to as offline \acs*{SLAM} and heavy implementations that are not meant to run in real-time are referred as online \acs*{SLAM}} \acs*{SLAM}, RTAB-Map has a memory manager that keeps control of the amount of locations and landmarks used in the loop closure. RTAB-Map can generate both 2D and 3D Occupancy grids.
 
-Several \acs*{LiDAR} based method derive from \acl*{LOAM}, commonly known as \acs*{LOAM}. Implementations based on \acs*{LOAM} usually obtain both odometry and mapping from \acs*{LiDAR}. Although it can create high accuracy maps, the maps are static and it usually perform poorly in places with fewer landmarks, like long corridors. The LeGO-LOAM add two aditional modules to the \acs*{LOAM} technique: pointcloud segmentation and denoising and feature extraction. These extra components allow to filter out dynamic entities but it does not improve the performance when the environment has few features to be extracted. To help improving the performance, researchers started to implement an \acs*{IMU} to the system in a tighly coupled approach \cite{ye2019tightly}. As it was very computed intensive to take all sensory data, the authors in \cite{liosam2020shan} sugested a \acl*{LIO-SAM} (\acs*{LIO-SAM}).
+Several \acs*{LiDAR} based method derive from \acl*{LOAM}, commonly known as \acs*{LOAM}. Implementations based on \acs*{LOAM} usually obtain both odometry and mapping from \acs*{LiDAR}. Although it can create high accuracy maps, the maps are static and it usually perform poorly in places with fewer landmarks, like long corridors. The LeGO-LOAM \footnote{The \acs*{ROS} package can be at \url{https://github.com/RobustFieldAutonomyLab/LeGO-LOAM}} add two aditional modules to the \acs*{LOAM} technique: pointcloud segmentation and denoising and feature extraction. These extra components allow to filter out dynamic entities but it does not improve the performance when the environment has few features to be extracted. To help improving the performance, researchers started to implement an \acs*{IMU} to the system in a tighly coupled approach \cite{ye2019tightly}. As it was very computed intensive to take all sensory data, the authors in \cite{liosam2020shan} sugested the \acl*{LIO-SAM} (\acs*{LIO-SAM} \footnote{The \acs*{ROS} package can be at \url{https://github.com/TixiaoShan/LIO-SAM}}).
 
 Cartographer is Google's implementation to solve the \acs*{SLAM} challenge \cite{hess_real-time_2016}. It is another \acs*{LiDAR} based graph \acs*{SLAM} divided into two main components: local \acs*{SLAM} (the front end) and global \acs*{SLAM} (the backend). This approach takes input of range finding sensor, like \acs*{LiDAR}, and applies a bandpass filter to the input data. \acs*{IMU} can also be used to help figuring out the robot rotation and to provide information on gravity direction, that is used in the 3D variant. 
 
 
-%\todo[inline]{EKF-LOAM}
-\todo[inline]{LIO-SAM}
-\todo[inline]{Hector-SLAM \cite{kohlbrecher_flexible_2011}}
-\todo[inline]{Gmapping \cite{grisetti_improved_2007}}
+%\todo[inline]{EKF-LOAM} Check what was written
+%\todo[inline]{LIO-SAM} Check what was written
 %\todo[inline]{RTAB-Map} kinda of done
 %\todo[inline]{Cartographer}
 \todo[inline]{online-FGO}
 \todo[inline]{DAMS-LIO}
  
-
-
 \section{Related Data Acquisition Apparatus}
 
 It is no surprise that there are already a number of portable and light sensors designed to collect sensor data about the environment around us. There are several proprietary solutions available on the market for gathering sensory information for \acs*{SLAM}, but they tend to be expensive \cite{libackpack_C50}, \cite{libackpack_DGC50}. Additionally, there are some articles and research papers that have been conducted with the goal of building a system similar to the one proposed here. These works will be the ones to be focused on since the methodology, and results are readily available.
