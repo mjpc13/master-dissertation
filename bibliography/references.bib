@@ -232,6 +232,21 @@ type: article},
         year = {2021},
 }
 
+%Scan mathing image
+@article{konecny_scan_2019,
+        title = {Scan {Matching} by {Cross}-{Correlation} and {Differential} {Evolution}},
+        volume = {8},
+        issn = {2079-9292},
+        url = {https://dx.doi.org/10.3390/electronics8080856},
+        doi = {10.3390/electronics8080856},
+        number = {8},
+        journal = {Electronics},
+        author = {Konecny, Jaromir and Kromer, Pavel and Prauzek, Michal and Musilek, Petr},
+        year = {2019},
+        note = {Publisher: MDPI AG},
+        pages = {856},
+}
+
 %---OCTOMAP---
 @article{hornung_octomap_2013,
         title = {{OctoMap}: an efficient probabilistic {3D} mapping framework based on octrees},
@@ -390,6 +405,15 @@ type: article},
   organization={IEEE}
 }
 
+@inproceedings{kim_scan_2018,
+        title = {Scan {Context}: {Egocentric} {Spatial} {Descriptor} for {Place} {Recognition} {Within} {3D} {Point} {Cloud} {Map}},
+        url = {https://dx.doi.org/10.1109/iros.2018.8593953},
+        doi = {10.1109/iros.2018.8593953},
+        publisher = {IEEE},
+        author = {Kim, Giseop and Kim, Ayoung},
+        year = {2018},
+}
+
 %LIO-SAM
 @inproceedings{liosam2020shan,
   title={LIO-SAM: Tightly-coupled Lidar Inertial Odometry via Smoothing and Mapping},
@@ -499,4 +523,19 @@ type: article},
         year = {2022},
         pages = {939},
         file = {Full Text:/home/mjpc13/Zotero/storage/AUMX2X4M/Xiao et al. - 2022 - High-Precision SLAM Based on the Tight Coupling of.pdf:application/pdf},
+}
+
+@techreport{sier_benchmark_2022,
+        title = {A {Benchmark} for {Multi}-{Modal} {Lidar} {SLAM} with {Ground} {Truth} in {GNSS}-{Denied} {Environments}},
+        url = {http://arxiv.org/abs/2210.00812},
+        abstract = {Lidar-based simultaneous localization and mapping (SLAM) approaches have obtained considerable success in autonomous robotic systems. This is in part owing to the high-accuracy of robust SLAM algorithms and the emergence of new and lower-cost lidar products. This study benchmarks current state-of-the-art lidar SLAM algorithms with a multi-modal lidar sensor setup showcasing diverse scanning modalities (spinning and solid-state) and sensing technologies, and lidar cameras, mounted on a mobile sensing and computing platform. We extend our previous multi-modal multi-lidar dataset with additional sequences and new sources of ground truth data. Specifically, we propose a new multi-modal multi-lidar SLAM-assisted and ICP-based sensor fusion method for generating ground truth maps. With these maps, we then match real-time pointcloud data using a natural distribution transform (NDT) method to obtain the ground truth with full 6 DOF pose estimation. This novel ground truth data leverages high-resolution spinning and solid-state lidars. We also include new open road sequences with GNSS-RTK data and additional indoor sequences with motion capture (MOCAP) ground truth, complementing the previous forest sequences with MOCAP data. We perform an analysis of the positioning accuracy achieved with ten different SLAM algorithm and lidar combinations. We also report the resource utilization in four different computational platforms and a total of five settings (Intel and Jetson ARM CPUs). Our experimental results show that current state-of-the-art lidar SLAM algorithms perform very differently for different types of sensors. More results, code, and the dataset can be found at: {\textbackslash}href\{https://github.com/TIERS/tiers-lidars-dataset-enhanced\}\{\vphantom{\}}github.com/TIERS/tiers-lidars-dataset-enhanced.},
+        number = {arXiv:2210.00812},
+        urldate = {2022-10-12},
+        institution = {arXiv},
+        author = {Sier, Ha and Qingqing, Li and Xianjia, Yu and Queralta, Jorge Peña and Zou, Zhuo and Westerlund, Tomi},
+        month = oct,
+        year = {2022},
+        note = {arXiv:2210.00812 [cs]
+type: article},
+        keywords = {Computer Science - Robotics},
 }
