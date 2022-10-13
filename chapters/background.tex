@@ -25,7 +25,7 @@ The Kalman filter is a \textbf{linear} iterative process based on Bayes Theorem,
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{images/background/Kalman-diagram.pdf}
-    \caption{Simple flowchart of the Kalman Filter. \textcolor{red}{ADD REFERENCE}}
+    \caption{Simple flowchart of the Kalman Filter.}
     \label{fig: flowchart kalman}
 \end{figure}
 
@@ -37,7 +37,7 @@ The Particle Filter is an iterative linear method is based on the Monte Carlo ap
 
 \section{\acs*{SLAM} techniques}
 
-Now that both localization and mapping were reviewd, the techniques to merge them together in \acs*{SLAM} can be presented. As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A way to reduce is to establish a two way communication between the localization and mapping component. Classical odometry is computed from motion sensors such as \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms (identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Liu et al. \cite{liu_visual_2021} developed a Visual Odometry algorithm based on a Deep Learning technique. Another way to acquire odometry is by using \acs*{LiDAR}s and a scan matching algorithm like the \acl*{ICP} method (\acs*{ICP}). Scan matching takes two pointclouds or 2D \acs*{LiDAR} scans and finds the transformation that produces the least amount of error between points. Simply put, it tries to transform in a way to overlap the information of both scans, the transform is then applied to estimate the robots location, as is shown in Figure \ref*{fig: scan mathing algorithm}. Both scan matching and feature matching can be used to find a transform to update the localization of the robot, Figure \ref*{fig: scan mathing algorithm} shows how scan matching can be used to update the robot location with information of the map.
+Now that both localization and mapping were reviewed, the techniques to merge them together in \acs*{SLAM} can be presented. As mentioned before, sensors used to capture information of the real world have uncertainties associated with each measurement. Even when algorithms are implemented to diminish these errors, they never vanish completely. When performing \acs*{SLAM}, a moving robot's perception and performance can be severely affected by these inaccuracies as they accumulate and become increasingly large. In the case of a pose error, in each iteration odometry information is combined with the previous pose, both of which are subject to uncertainty. Over time, the cumulative error of the robot will increase significantly. A way to reduce is to establish a two way communication between the localization and mapping component. Classical odometry is computed from motion sensors such as \acs*{IMU} or wheel encoders, but it is also possible to use cameras as an input to acquire odometry, this is called visual odometry. Feature matching algorithms (identifying and relating the same features of an object from different perpectives) like ORB \cite{rublee_orb_2011} are at the core of many Visual Odometry algorithms, recently Liu et al. \cite{liu_visual_2021} developed a Visual Odometry algorithm based on a Deep Learning technique. Another way to acquire odometry is by using \acs*{LiDAR}s and a scan matching algorithm like the \acl*{ICP} method (\acs*{ICP}). Scan matching takes two pointclouds or 2D \acs*{LiDAR} scans and finds the transformation that produces the least amount of error between points. Simply put, it tries to transform in a way to overlap the information of both scans, the transform is then applied to estimate the robots location, as is shown in Figure \ref*{fig: scan mathing algorithm}. Both scan matching and feature matching can be used to find a transform to update the localization of the robot, Figure \ref*{fig: scan mathing algorithm} shows how scan matching can be used to update the robot location with information of the map.
 
 \begin{figure}[H]
     \centering
@@ -75,7 +75,7 @@ Every new pose introduces a new node into the graph with multiple constraints as
 
 An effective robotics project cannot be achieved by just having sensors and physical components; rather, one must have a clever communication system between sensors and processes. This task can be carried out by the \acl*{ROS} (\acs*{ROS}). 
 
-Although the name \acl*{ROS} suggests that \acs*{ROS} is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. Many of these libraries are open-source implementations of previously described \acs*{SLAM} techniques, these libraries will now be reviewd and compared.
+Although the name \acl*{ROS} suggests that \acs*{ROS} is an operating system, this is not the case.  In a way, \acs*{ROS} is both middleware and a framework. The system provides a communication channel where messages can be easily subscribed, published and distributed, allowing quick integration between systems and components. Moreover, it provides features such as debugging, visualization, testing, logging, and configuration right out of the box. Additionally, ROS includes a number of useful packages for essential areas relevant to robotics such as movement, perception, and manipulation. The ROS community is also constantly evolving with the most recent developments in robotics, so libraries are always being added to ROS. Many of these libraries are open-source implementations of previously described \acs*{SLAM} techniques, these libraries will now be reviewed and compared.
 
 
 \section{\acs*{SLAM} implementations in \acs*{ROS}}
@@ -84,7 +84,7 @@ There are a multitude of open source implementations of \acs*{SLAM}. Since one o
 
 One of the most popular implementations of \acs*{SLAM} is Real Time Appearance Based Mapping (RTAB-Map) \cite{labbe_rtab-map_2019}. RTAB-Map\footnote{The \acs*{ROS} implementation can be found at \url{https://github.com/introlab/rtabmap}} is a graph-based \acs*{SLAM} that uses loop closure detector and offers several options for the backend, namely GTSAM (default) \cite{gtsam}, g2o \cite{kummerle_g2o_2011} and TORO \cite{grisetti_nonlinear_2009}. It supports several sensors, namely \acs*{LiDAR}, RGB-D and stereo cameras. It can gather odometry from \acs*{IMU} and wheel encoders but it also supports Visual and \acs*{LiDAR} odometry as optional sources. In order to ensure offline\footnote{In literature, real-time \acs*{SLAM} is referred to as offline \acs*{SLAM} and heavy implementations that are not meant to run in real-time are referred as online \acs*{SLAM}} \acs*{SLAM}, RTAB-Map has a memory manager that keeps control of the amount of locations and landmarks used in the loop closure. Additionally, when executing the loop closure, RTAB-Map will reuse the features that were previously matched in Visual or \acs*{LiDAR} Odometry, this also contributes for performance. RTAB-Map can generate both 2D and 3D Occupancy grids with Octomap.
 
-Several \acs*{LiDAR} based method derive from \acl*{LOAM}, commonly known as \acs*{LOAM}. Implementations based on \acs*{LOAM} usually obtain both odometry and mapping from \acs*{LiDAR}. Although it can create high accuracy maps, the maps are static and it usually performs poorly in places with few landmarks, like long corridors. The LeGO-LOAM\footnote{The \acs*{ROS} package can be at \url{https://github.com/RobustFieldAutonomyLab/LeGO-LOAM}} add two aditional modules to the \acs*{LOAM} technique: pointcloud segmentation and denoising and feature extraction. These extra components allow to filter out dynamic entities but it does not improve the performance when the environment has few features to be extracted. LeGO-LOAM uses the naive \acs*{ICP} algorithm to perform loop closure, but a more robust approach, based in a point cloud descriptor is implemented in the SC-LeGO-LOAM\footnote{The \acs*{ROS} package can be at \url{https://github.com/irapkaist/SC-LeGO-LOAM}} \cite{kim_scan_2018}. To help improving the performance, researchers started to implement an \acs*{IMU} to the system in a tighly coupled approach \cite{ye2019tightly}. As it was very computed intensive to take all sensory data, the authors in \cite{liosam2020shan} sugested the \acl*{LIO-SAM} (\acs*{LIO-SAM}\footnote{The \acs*{ROS} package can be at \url{https://github.com/TixiaoShan/LIO-SAM}}).
+Several \acs*{LiDAR} based method derive from \acl*{LOAM}, commonly known as \acs*{LOAM}. Implementations based on \acs*{LOAM} usually both odometry and mapping from \acs*{LiDAR}. Although it can create high accuracy maps, the maps are static and it usually performs poorly in places with few landmarks, like long corridors. The LeGO-LOAM\footnote{The \acs*{ROS} package can be at \url{https://github.com/RobustFieldAutonomyLab/LeGO-LOAM}} add two aditional modules to the \acs*{LOAM} technique: pointcloud segmentation and loop closure. These extra components allow a improvement in computing performance and drift reduction over long distances but doesn't improve the results when used in a featureless enviroment. LeGO-LOAM uses the naive \acs*{ICP} algorithm to perform loop closure, but a more robust approach, based in a point cloud descriptor is implemented in the SC-LeGO-LOAM\footnote{The \acs*{ROS} package can be at \url{https://github.com/irapkaist/SC-LeGO-LOAM}} \cite{kim_scan_2018}. To help improving the performance in low features environment, researchers started to implement an \acs*{IMU} to the system in a tighly coupled approach \cite{ye2019tightly}, \cite{xu_fast-lio_2021}, \cite{xu_fast-lio2_2021}. As it was very computed intensive to take all sensory data, the authors in \cite{liosam2020shan} sugested the \acl*{LIO-SAM} (\acs*{LIO-SAM}\footnote{The \acs*{ROS} package can be at \url{https://github.com/TixiaoShan/LIO-SAM}}).
 
 Cartographer is Google's implementation to solve the \acs*{SLAM} challenge \cite{hess_real-time_2016}. It is another \acs*{LiDAR} based graph \acs*{SLAM} divided into two main components: local \acs*{SLAM} (the front end) and global \acs*{SLAM} (the backend). This approach takes input of range finding sensor, like \acs*{LiDAR}, and applies a bandpass filter to the input data. \acs*{IMU} can also be used to help figuring out the robot rotation and to provide information on gravity direction, that is used in the 3D variant.
  
@@ -97,12 +97,89 @@ There exist multiple ways to scan a forest, Oveland et al. \cite{oveland_compari
 Recently, Kui Xao developed a dual \acs*{LiDAR}s system, an \acs*{IMU}, and \acs*{GPS} for performing \acs*{SLAM} in multi-scene applications \cite{xiao_high-precision_2022}. To increase the vertical \acl*{FOV} (\acs*{FOV}), one of the \acs*{LiDAR}s was placed in the \textit{XY} plane while the other was positioned at -77.94° from the \textit{XY} plane. A timestamp synchronization algorithm helped the authors merging the 3D scans from both \acs*{LiDAR}s. Secondly, the \acs*{LiDAR} data is tightly coupled with the IMU data in order to reduce noise caused by the inaccuracy of \acs*{LiDAR}-based odometry. In outdoor tests, the \acs*{IMU} calibration is improved by loosely coupling \acs*{GPS} to the \acs*{IMU} during outdoor tests. While their framework outperformed the LeGO-LOAM and LIO-SAM in indoor enviroment it failed to produce any meaningfull diference in an outdoor setup. In forest environments, on the other hand, can be expected to show a slight improvement due to the high trees that can be detected by the vertical LiDAR, adding additional features.
 Based on an Ouster OS0-128 \acs{LiDAR} and a RealSense D435i, both with an integrated \acs{IMU}, Alexander Proudman's system performs online \acs{SLAM} and estimates \acl{DBH} (\acs*{DBH}) using the data collected \cite{proudman_online_2021}. While their application has the benefit of having a built-in display that allows real-time visualization of data, one of its major drawbacks is the way they build their apparatus, opting for a metal stick rather than a backpack type of design. For estimating \acs*{DBH} in an experimental setup the system presents a \acs*{RMSE} of 0.07m not considering outliers and 0.14m with outliers. As the authors acknowledge, user fatigue may lead to excessive variations in stick position, resulting in unintelligible and uncontrolled movements, damaging the performance of the apparatus. This would not be an issue if a more ergonomic structure was used. The errors due to user fatigue can be a slightly mitigated by performing \acs{SLAM} in several sessions instead of one, allowing the user to rest between shorter sessions. After recording multiple sessions, \acs*{GPS} information is used to assemble the multiple sessions's map into a single map.
 
-Yanjun Su et al. \cite{su_development_2021} developed an accurate backpack with dual \acs*{LiDAR} positioned orthogonally for forest inventory. The system contains two Velodyne Puck VLP-16  \acs*{LiDAR}, an \acs*{IMU} and a display to allow real time view of the point clouds generated. The system was design to not be \acs*{GPS} dependent. The researcher claims that using an open-source Python package managed to achieve a \acs*{RMSE} of 0.02m, a value slighly lower than Alexander's implementation \cite{proudman_online_2021}. Since the system has a vertical \acs*{LiDAR} it was also able to estimate the height of trees, obtaining a \acs*{RMSE} of 1.9m and a $R^2$ of only 0.65.
-
 Yanjun Su et al. \cite{su_development_2021} developed an accurate backpack with dual \acs*{LiDAR} positioned orthogonally for forest inventory. This system consists of two Velodyne Puck VLP-16 \acs*{LiDAR}s, an \acs*{IMU}, and a display for viewing the generated point clouds in real time. The system was designed to not be \acs*{GPS} dependent. Using an open-source Python package, the researcher claims to have achieved an \acs*{RMSE} of 0.02m, a value slightly lower than Alexander's. Due to its vertical \acs*{LiDAR}, the system was also able to estimate the height of trees, obtaining a RMSE of 1.9m but with a $R^2$ of only 0.65.
 
-\todo[inline]{Talk about \cite{sier_benchmark_2022}}
+Sier et. al \cite{sier_benchmark_2022} design an apparatus with the objective to compute ground truth for trajectory in GNSS denied environments. The apparatus features six different \acs*{LiDAR}, with both spinning and solid state technologies and a stereo fish eye camera. The authors compare different state of the art \acs*{LiDAR} based \acs*{SLAM} with different \acs*{LiDAR} configurations to assess the best overall combination. The author concludes that the most robust combination is the FAST-LIO \cite{xu_fast-lio_2021} implementation using the more precise OS0 and OS1 spinning \acs*{LiDAR}s. It also reached to the interested conclusion that on outdoor environment the solid state \acs*{LiDAR}s had a similiar performance againts the more expensive counterparts. This is to be expected as the number of features in outdoor environment is considerably larger.
+ 
+Table \ref*{tab: compare apparatus} offers a comparison between the several apparatus reviewed. As one is able to see, the apparatus focused in forest aplication don't compare multiple \acs*{SLAM} implementations, being more focused in determing the \acs*{DBH} of trees. Some of the forest focused apparatus send the recorded footage to an cloud base system to perform \acs*{SLAM} like GeoSLAM Hub\footnote{GeoSLAM Hub is a \acs*{SLAM} cloud provider, producing a map based on 3D data received. The \acs*{SLAM} algorithm used is not described}. Of all the implementations discussed only one uses a RGB-D camera, a critical component to perform combustible material identification and trees species and objects identification.
 
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|c|cccc|c|c|c|c|c|}
+    \hline
+    \multirow{2}{*}{\textbf{Implementation}} &
+      \multicolumn{4}{c|}{\textbf{Inputs}} &
+      \multirow{2}{*}{\textbf{Display}} &
+      \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Structure\\ Type\end{tabular}}} &
+      \multirow{2}{*}{\textbf{SLAM Used}} &
+      \multirow{2}{*}{\textbf{Forestry Application}} &
+      \multirow{2}{*}{\textbf{RMSE of DBH}} \\ \cline{2-5}
+     &
+      \multicolumn{1}{c|}{RGB-D} &
+      \multicolumn{1}{c|}{IMU} &
+      \multicolumn{1}{c|}{LiDAR} &
+      GPS/GNSS &
+       &
+       &
+       &
+       &
+       \\ \hline
+    Oveland &
+      \multicolumn{1}{c|}{$\times$} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \checkmark &
+      $\times$ &
+      Backpack &
+      GeoSLAM Hub &
+      \checkmark &
+      0.022m \\ \hline
+    Xiao &
+      \multicolumn{1}{c|}{$\times$} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \checkmark &
+      \checkmark &
+      Backpack &
+      \begin{tabular}[c]{@{}c@{}}LeGO-LOAM, LIO-SAM,\\ HSDLIO\end{tabular} &
+      $\times$ &
+      N.A \\ \hline
+    Proudman &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \checkmark &
+      \checkmark &
+      Stick &
+      Graph-based SLAM &
+      \checkmark &
+      0.07m//0.14m \\ \hline
+    Su &
+      \multicolumn{1}{c|}{$\times$} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      $\times$ &
+      \checkmark &
+      Backpack &
+      N.A &
+      \checkmark &
+      0.02m \\ \hline
+    Sier &
+      \multicolumn{1}{c|}{$\times$} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \multicolumn{1}{c|}{\checkmark} &
+      \checkmark &
+      $\times$ &
+      Wheel Cart &
+      \begin{tabular}[c]{@{}c@{}}LeGo-LOAM, FAST-LIO, \\ Livox-Mapping, LIO-LIVOX\end{tabular} &
+      $\times$ &
+      N.A \\ \hline
+    \end{tabular}%
+    }
+    \caption{Comparative table of the several apparatus reviewed in this section}
+    \label{tab: compare apparatus}
+\end{table}
 
 \begin{figure}[H]
     \centering
@@ -122,7 +199,17 @@ Yanjun Su et al. \cite{su_development_2021} developed an accurate backpack with 
         \caption{Yanjun's apparatus \cite{su_development_2021}}
         \label{fig: yanjun apparatus}
     \end{subfigure}
+    \\[3ex]
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{images/background/oveland_apparatus.jpg}
+        \caption{Oveland's apparatus \cite{oveland_comparing_2018}}
+        \label{fig: oveland apparatus}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{images/background/sier_apparatus.png}
+        \caption{Sier's apparatus \cite{sier_benchmark_2022}}
+        \label{fig: sier apparatus}
+    \end{subfigure}
     \caption{Collection of the apparatus discussed in this section}
     \label{fig: all apparatus}
 \end{figure}
-\todo[inline]{Add images of \cite{sier_benchmark_2022} and \cite{oveland_comparing_2018}}
