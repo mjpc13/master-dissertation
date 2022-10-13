@@ -6,88 +6,18 @@ Some of these robots weigh over a ton, have large dimensions, and lack flexibili
 
 In short, wildfires are important to a healthy ecosystem but they need to be controlled to not damage populations and wildlife. The first step to increasing fire control is to clean the forest of dead organic matter, a task that can be performed by robots. As these robots are heavy, scientists and researchers find it difficult to obtain data directly from them, requiring a light system to record the necessary data to develop and test algorithms.
 
-
 \section{Objectives}
 In this work, we aim to design a rigid multisensory apparatus with an onboard computer to map forests. This apparatus combines multiple sensing technologies, such as 3D \acs{LiDAR}, depth cameras, infrared spectroscopy and \acl{IMU} (\acs{IMU}). With this apparatus, we will be able to collect datasets from forest environments, thus supporting forest operations, such as metric-semantic 3D mapping, combustible material identification, and forest cleaning. Aside from designing the apparatus, it is intended to integrate, test, and then compare state-of-the-art 3D mapping techniques based on the ROS middleware.
 
 \section{System Requirements}
 
-In order to create a system able to collect the necessary data ensuring it complies with the requirements of future projects a MoSCoWW analysis was performed. Generally, a MoSCoWW analysis is composed by:
+In order to create a system able to collect the necessary data while ensuring it complies with the requirements of future projects the MoSCoWW analysis was made and it is presented in Figure \ref{fig: moscoww}.
 
-\begin{itemize}
-    \item \textbf{Must} states the non-negotiable features for the project.
-    \item \textbf{Should} lists important features that are not crucial but add significant value to the overall project.
-    \item \textbf{Could} is composed by nice to have features that have a small impact on the project as a hole.
-    \item \textbf{Won't} compiles initiatives that will not be implemented in the current time frame.
-    \item \textbf{Would} is an extra category stating features that won't be commited during the execution of the project, but will try to be implemented.
-\end{itemize}
-
-The following MoSCoWW analysis was made for this project:
-
-\begin{itemize}
-    \item \textbf{Must:}
-    \begin{itemize}
-        \item Ensure all software developed is well integrated within the ROS framework since it is a well known and vastly used technology for this type of applications.
-        \item Incorporate the following sensors/cameras:
-        \begin{itemize}
-            \item A Xsens IMU allowing the gathering of the following information: 
-            \begin{itemize}
-                \item Orientation @ 100Hz
-                \item Linear Acceleration @ 100Hz
-                \item Angular Velocity @ 100Hz
-                \item Magnetometer @100 Hz
-            \end{itemize}
-            \item An Intel RealSense D435i that will collect: 
-            \begin{itemize}
-                \item RGB Image @ 12Hz
-                \item Depth Image @ 12Hz
-                \item InfraRed Image @ 12Hz
-                \item Camera intrinsic parameters @0.1Hz
-                \item Linear Acceleration @ 100Hz
-                \item Angular Velocity @ 100Hz
-            \end{itemize}
-            \item A Livox 3D LiDAR to gather:
-            \begin{itemize}
-                \item LaserScans @ 10Hz\
-            \end{itemize}
-        \end{itemize}
-        \item Use a small factor onboard computer able to process and record all the information from the sensors at the desired frequencies.
-        \item Be able to continuously function during a time period of at least 2 hours.
-        \item Employ a cooling solution that ensures the sensors don't go beyond their maximum operating temperature and the body can withstand temperatures of 60degrees Celsius.
-        \item Restrict all sensors and cameras to a fixed position on the apparatus, keeping the geometrical relationship between them constant.
-    \end{itemize}
-    \item \textbf{Should:}
-    \begin{itemize}
-        \item Incorporate a Mynt Eye that will collect the following information:
-        \begin{itemize}
-            \item Depth Image @ 30Hz
-            \item InfraRed Image @ 12Hz
-            \item Camera intrinsic parameters @ 0.1Hz
-            \item Linear velocity @ 100Hz
-            \item Angular acceleration @ 100Hz
-        \end{itemize}    
-        \item Be comfortable and safe for the operator to handle during an extended amount of time.
-        \item Be modular, it should be easy to add/swap/remove sensors or processing nodes with relative ease.
-        \item Have an easy battery replacement method.
-        \item Warn the user in the event of a sensor malfunction at startup, ex. a sensor stops sending data at the desired rate or goes offline.
-    \end{itemize}
-    \item \textbf{Could:}
-    \begin{itemize}   
-        \item Easy access to the memory SSD
-        \item Have a dedicated space for the user to place it's mobile Android device
-        \item Allow the change of the yaw orientation of at least one RGB-D camera, to allow the user to choose the Depth image overlap at a given distance of the multiple Depth sensors (RGB-D, Mynt Eye and LiDAR).
-        \item Have visual feedback for the user.
-    \end{itemize}
-    \item \textbf{Won't:}
-    \begin{itemize}
-        \item Deploy heavy algorithms since the main objective is to gather data, not process it in a live environment.
-        \item Be weather resistance, so it can  not be used in rainy days
-    \end{itemize}
-    \item \textbf{Would:}
-    \begin{itemize}
-        \item Have live visual feedback for the user
-    \end{itemize}
-\end{itemize}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.875\linewidth]{images/introduction/moscoww_analysis.pdf}
+    \caption{MoSCoWW analysis for the project}
+    \label{fig: moscoww}
+\end{figure}
 
 \section{Dissertation Structure}
