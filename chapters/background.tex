@@ -88,126 +88,152 @@ Cartographer is Google's implementation to solve the \acs*{SLAM} challenge \cite
  
 \section{Related Data Acquisition Apparatus}
 
-It is no surprise that there are already a number of portable and light sensors designed to collect data about the environment around us. There are several proprietary solutions available on the market for gathering sensory information for \acs*{SLAM}, but they tend to be expensive \cite{libackpack_C50, libackpack_DGC50}. Additionally, there are some articles and research papers that have been conducted with the goal of building a system similar to the one proposed here. These works will be the ones to be focused on since the methodology, and results are readily available.
+It is no surprise that there are already a number of portable and light sensors designed to collect data about the environment around us. There are several proprietary solutions available on the market for gathering sensory information for \acs*{SLAM}, but they tend to be expensive \cite{libackpack_C50, libackpack_DGC50}. Additionally, there are some articles and research papers that have been conducted with the goal of building a system similar to the one proposed here. Considering that the methodology and results of these studies are readily available, these will be the ones that are selected for further study.
 
 There exist multiple ways to scan a forest, Oveland et al. \cite{oveland_comparing_2018} compared three different ground LiDAR scanning implementations, namely, Handeld LiDAR, Backpack LiDAR (composed by two \acs*{LiDAR} perpendicular to each other) and Terrestial LiDAR. The authors compared the measurements of \acs*{DBH} to conclude that while the Terrestial LiDAR Scanners (a fixed system) is the most accurate, it fails to detect ocult areas. According to the authors the handheld LiDAR scanner has troubles in detecting smaller trees. Even though the backpack LiDAR has the highest number of false trees, the authors still aknowledge it as the most efficient method since it presents the highest amount of trees detected and low \acl*{RMSE} (\acs*{RMSE}) of $0.022m$.
 
-Recently, Kui Xao developed a dual \acs*{LiDAR}s system, an \acs*{IMU}, and \acs*{GPS} for performing \acs*{SLAM} in multi-scene applications \cite{xiao_high-precision_2022}. To increase the vertical \acl*{FOV} (\acs*{FOV}), one of the \acs*{LiDAR}s was placed in the \textit{XY} plane while the other was positioned at -77.94° from the \textit{XY} plane. A timestamp synchronization algorithm helped the authors merging the 3D scans from both \acs*{LiDAR}s. Secondly, the \acs*{LiDAR} data is tightly coupled with the IMU data in order to reduce noise caused by the inaccuracy of \acs*{LiDAR}-based odometry. In outdoor tests, the \acs*{IMU} calibration is improved by loosely coupling \acs*{GPS} to the \acs*{IMU} during outdoor tests. While their framework outperformed the LeGO-LOAM and LIO-SAM in indoor enviroment it failed to produce any meaningfull diference in an outdoor setup. In forest environments, on the other hand, can be expected to show a slight improvement due to the high trees that can be detected by the vertical LiDAR, adding additional features.
+Recently, Kui Xao developed a dual \acs*{LiDAR}s system, an \acs*{IMU}, and \acs*{GPS} for performing \acs*{SLAM} in multi-scene applications \cite{xiao_high-precision_2022}. To increase the vertical \acl*{FOV} (\acs*{FOV}), one of the \acs*{LiDAR}s was placed in the \textit{XY} plane while the other was positioned at -77.94° from the \textit{XY} plane. A timestamp synchronization algorithm helped the authors merging the 3D scans from both \acs*{LiDAR}s. Secondly, the \acs*{LiDAR} data is tightly coupled with the IMU data in order to reduce noise caused by the inaccuracy of \acs*{LiDAR}-based odometry. In outdoor tests, the \acs*{IMU} calibration is improved by loosely coupling \acs*{GPS} to the \acs*{IMU}. While their framework outperformed the LeGO-LOAM and LIO-SAM in indoor enviroment it failed to produce any meaningfull diference in an outdoor setup. In forest environments, on the other hand, can be expected to show a slight improvement due to the detection by the vertical \acs*{LiDAR} of the high trees, adding additional features.
 Based on an Ouster OS0-128 \acs{LiDAR} and a RealSense D435i, both with an integrated \acs{IMU}, Alexander Proudman's system performs online \acs{SLAM} and estimates \acl{DBH} (\acs*{DBH}) using the data collected \cite{proudman_online_2021}. For estimating \acs*{DBH} in an experimental setup the system presents a \acs*{RMSE} of 0.07m not considering outliers and 0.14m with outliers. While their application has the benefit of having a built-in display that allows real-time visualization of data, one of its major drawbacks is the way they build their apparatus, opting for a metal stick rather than a backpack type of design.  As the authors acknowledge, user fatigue may lead to excessive variations in stick position, resulting in unintelligible and uncontrolled movements, damaging the performance of the apparatus. This would not be an issue if a more ergonomic structure was used. The errors due to user fatigue can be slightly mitigated by performing \acs{SLAM} in several sessions instead of one, allowing the user to rest between shorter sessions. After recording multiple sessions, \acs*{GPS} information is used to assemble the multiple sessions' map into a single map.
 
-Yanjun Su et al. \cite{su_development_2021} developed an accurate backpack with dual \acs*{LiDAR} positioned orthogonally for forest inventory. This system consists of two Velodyne Puck VLP-16 \acs*{LiDAR}s, an \acs*{IMU}, and a display for viewing the generated point clouds in real time. The system was designed to not be \acs*{GPS} dependent. Using an open-source Python package, the researcher claims to have achieved an \acs*{RMSE} of 0.02m, a value slightly lower than Alexander's. Due to its vertical \acs*{LiDAR}, the system was also able to estimate the height of trees, obtaining a RMSE of 1.9m but with a $R^2$ of only 0.65.
+Yanjun Su et al. \cite{su_development_2021} developed an accurate backpack with dual \acs*{LiDAR} positioned orthogonally for forest inventory. This system consists of two Velodyne Puck VLP-16 \acs*{LiDAR}s, an \acs*{IMU}, and a display for viewing the generated point clouds in real time. The system was designed to not be \acs*{GPS} dependent. Using an open-source Python package, the researcher claims to have achieved an \acs*{RMSE} of 0.02m, a value slightly lower than Alexander's. Due to its vertical \acs*{LiDAR}, the system was also able to estimate the height of trees, obtaining a \acs*{RMSE} of 1.9m.
 
-Sier et. al \cite{sier_benchmark_2022} design an apparatus with the objective to compute ground truth for trajectory in \acs*{GNSS} denied environments. The apparatus features six different \acs*{LiDAR}, with both spinning and solid state technologies and a stereo fish eye camera. The authors compare different state of the art \acs*{LiDAR} based \acs*{SLAM} with different \acs*{LiDAR} configurations to assess the best overall combination. The author concludes that the most robust combination is the FAST-LIO \cite{xu_fast-lio_2021} implementation using the more precise OS0 and OS1 spinning \acs*{LiDAR}s. It also concluded that on outdoor environment the solid state \acs*{LiDAR}s had a similiar performance against the more expensive counterparts. This is to be expected as the number of features in outdoor environment is considerably larger.
- 
+Sier et. al \cite{sier_benchmark_2022} design an apparatus with the objective to compute ground truth for trajectory in \acs*{GNSS} denied environments. The apparatus features six different \acs*{LiDAR}, with both spinning and solid state technologies and a stereo fish eye camera. The authors compare different state of the art \acs*{LiDAR} based \acs*{SLAM} with different \acs*{LiDAR} configurations to assess the best overall combination. The author concludes that the most robust combination is the FAST-LIO \cite{xu_fast-lio_2021} implementation using the more precise OS0 and OS1 spinning \acs*{LiDAR}s. It also concluded that on outdoor environment the solid state \acs*{LiDAR}s had a similar performance against the more expensive counterparts. This is to be expected as the number of features in outdoor environment is considerably larger.
+
+A robot system developed by Jelavic performs precision harvesting missions \cite{jelavic_towards_2021}. The entire workflow begins with a human mapping the desired location with a \textit{sensor module}. A human expert then signals trees that need to be cut down to the autonomous vehicle. With the sensor module attached to the robot, a planning algorithm determines the most efficient path and pose to reach the next tree. Once the pose proposed in the previous step has been reached, the tree is grabbed and cut. In many ways, their \textit{sensor module} is similar to ours. Thei system uses a RealSense T265 tracking camera, an Ouster OS-1 \acs*{LiDAR}, an \acs*{IMU}, and a FLIR camera model BFS-U3-04S2M-CS, they spent approximately 10500 dollars. Cartographer was used to create the 3D map, with the \acs{LiDAR} being used for mapping and cameras for obtaining visual odometry. Only one of the cameras can be used at a time to obtain visual odometry. Similar to Proudman's design, the stick module may lead to user fatigue as discussed previously.
+
 Table \ref*{tab: compare apparatus} offers a comparison between the several apparatus reviewed. As one is able to see, the apparatus focused in forest aplication don't compare multiple \acs*{SLAM} implementations, being more focused in determing the \acs*{DBH} of trees. Some of the forest focused apparatus send the recorded footage to an cloud base system to perform \acs*{SLAM} like GeoSLAM Hub\footnote{GeoSLAM Hub is a \acs*{SLAM} cloud provider, producing a map based on 3D data received. The \acs*{SLAM} algorithm used is not described}. Of all the implementations discussed only one uses a RGB-D camera, a critical component to perform combustible material identification and trees species and objects identification.
 
 \begin{table}[H]
-    \centering
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{|c|cccc|c|c|c|c|c|}
-    \hline
-    \multirow{2}{*}{\textbf{Implementation}} &
-      \multicolumn{4}{c|}{\textbf{Inputs}} &
-      \multirow{2}{*}{\textbf{Display}} &
-      \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Structure\\ Type\end{tabular}}} &
-      \multirow{2}{*}{\textbf{SLAM Used}} &
-      \multirow{2}{*}{\textbf{Forestry Application}} &
-      \multirow{2}{*}{\textbf{RMSE of DBH}} \\ \cline{2-5}
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{|c|ccccc|c|c|c|c|c|}
+  \hline
+  \multirow{2}{*}{\textbf{Implementation}} &
+    \multicolumn{5}{c|}{\textbf{Inputs}} &
+    \multirow{2}{*}{\textbf{Display}} &
+    \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Structure\\ Type\end{tabular}}} &
+    \multirow{2}{*}{\textbf{SLAM Used}} &
+    \multirow{2}{*}{\textbf{Forestry Application}} &
+    \multirow{2}{*}{\textbf{RMSE of DBH}} \\ \cline{2-6}
+   &
+    \multicolumn{1}{c|}{Stereo} &
+    \multicolumn{1}{c|}{RGB-D} &
+    \multicolumn{1}{c|}{IMU} &
+    \multicolumn{1}{c|}{LiDAR} &
+    GPS/GNSS &
      &
-      \multicolumn{1}{c|}{RGB-D} &
-      \multicolumn{1}{c|}{IMU} &
-      \multicolumn{1}{c|}{LiDAR} &
-      GPS/GNSS &
-       &
-       &
-       &
-       &
-       \\ \hline
-    Oveland \cite{oveland_comparing_2018} &
-      \multicolumn{1}{c|}{$\times$} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \checkmark &
-      $\times$ &
-      Backpack &
-      GeoSLAM Hub &
-      \checkmark &
-      0.022m \\ \hline
-    Xiao \cite{xiao_high-precision_2022} &
-      \multicolumn{1}{c|}{$\times$} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \checkmark &
-      \checkmark &
-      Backpack &
-      \begin{tabular}[c]{@{}c@{}}LeGO-LOAM, LIO-SAM,\\ HSDLIO\end{tabular} &
-      $\times$ &
-      N.A \\ \hline
-    Proudman \cite{proudman_online_2021} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \checkmark &
-      \checkmark &
-      Stick &
-      Graph-based SLAM &
-      \checkmark &
-      0.07m//0.14m \\ \hline
-    Su \cite{su_development_2021} &
-      \multicolumn{1}{c|}{$\times$} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      $\times$ &
-      \checkmark &
-      Backpack &
-      N.A &
-      \checkmark &
-      0.02m \\ \hline
-    Sier \cite{sier_benchmark_2022} &
-      \multicolumn{1}{c|}{$\times$} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \multicolumn{1}{c|}{\checkmark} &
-      \checkmark &
-      $\times$ &
-      Wheel Cart &
-      \begin{tabular}[c]{@{}c@{}}LeGo-LOAM, FAST-LIO, \\ Livox-Mapping, LIO-LIVOX\end{tabular} &
-      $\times$ &
-      N.A \\ \hline
-    \end{tabular}%
-    }
-    \caption{Comparative table of the several apparatus reviewed in this section}
-    \label{tab: compare apparatus}
+     &
+     &
+     &
+     \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Oveland \cite{oveland_comparing_2018}\end{tabular} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    Yes &
+    No &
+    Backpack &
+    GeoSLAM Hub &
+    Yes &
+    0.022m \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Xiao \cite{xiao_high-precision_2022}\end{tabular} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    Yes &
+    Yes &
+    Backpack &
+    \begin{tabular}[c]{@{}c@{}}LeGO-LOAM, LIO-SAM,\\ HSDLIO\end{tabular} &
+    No &
+    N.A \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Proudman \cite{proudman_online_2021}\end{tabular} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    Yes &
+    Yes &
+    Stick &
+    Graph-based SLAM &
+    Yes &
+    0.07m//0.14m \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Su \cite{su_development_2021}\end{tabular} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    No &
+    Yes &
+    Backpack &
+    N.A &
+    Yes &
+    0.02 \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Sier \cite{sier_benchmark_2022}\end{tabular} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    Yes &
+    No &
+    Wheel Cart &
+    \begin{tabular}[c]{@{}c@{}}LeGo-LOAM, FAST-LIO, \\ Livox-Mapping, LIO-LIVOX\end{tabular} &
+    No &
+    N.A \\ \hline
+  \begin{tabular}[c]{@{}c@{}}Jevalic \cite{jelavic_towards_2021}\end{tabular} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{No} &
+    \multicolumn{1}{c|}{Yes} &
+    \multicolumn{1}{c|}{Yes} &
+    No &
+    No &
+    Stick &
+    Cartographer &
+    Yes &
+    N.A \\ \hline
+  \end{tabular}%
+  }
+  \caption{Comparison table between previously mention systems.}
+  \label{tab: compare apparatus}
 \end{table}
+
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.35\textwidth}
         \includegraphics[width=0.8\linewidth]{images/background/alexandar_apparatus.jpg}
-        \caption{Alexander's apparatus \cite{proudman_online_2021}}
+        \caption{Alexander's apparatus \cite{proudman_online_2021}.}
         \label{fig: Alexander apparatus}
     \end{subfigure}
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.35\textwidth}
         \includegraphics[width=0.875\linewidth]{images/background/xiao_apparatus.jpg}
-        \caption{Xiao's apparatus \cite{xiao_high-precision_2022}}
+        \caption{Xiao's apparatus \cite{xiao_high-precision_2022}.}
         \label{fig: Xiao apparatus}
     \end{subfigure}
     \\[3ex]
-    \begin{subfigure}{0.9\textwidth}
+    \begin{subfigure}{0.6\textwidth}
         \includegraphics[width=\linewidth]{images/background/su_apparatus.jpg}
-        \caption{Yanjun's apparatus \cite{su_development_2021}}
+        \caption{Yanjun's apparatus \cite{su_development_2021}.}
         \label{fig: yanjun apparatus}
     \end{subfigure}
     \\[3ex]
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.6\textwidth}
+      \includegraphics[width=\linewidth]{images/background/jelavic_towards_sensor_module.png}
+      \caption{Yanjun's apparatus \cite{su_development_2021}.}
+      \label{fig: jelavic apparatus}
+  \end{subfigure}
+  \\[3ex]
+    \begin{subfigure}{0.35\textwidth}
         \includegraphics[width=\linewidth]{images/background/oveland_apparatus.jpg}
-        \caption{Oveland's apparatus \cite{oveland_comparing_2018}}
+        \caption{Oveland's apparatus \cite{oveland_comparing_2018}.}
         \label{fig: oveland apparatus}
     \end{subfigure}
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{0.35\textwidth}
         \includegraphics[width=\linewidth]{images/background/sier_apparatus.png}
-        \caption{Sier's apparatus \cite{sier_benchmark_2022}}
+        \caption{Sier's apparatus \cite{sier_benchmark_2022}.}
         \label{fig: sier apparatus}
     \end{subfigure}
-    \caption{Collection of the apparatus discussed in this section}
+    \caption{Collection of the apparatus discussed in this section.}
     \label{fig: all apparatus}
 \end{figure}
