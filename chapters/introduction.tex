@@ -1,93 +1,17 @@
-Due to their destructive nature, wildfires are often viewed as something to be avoided at all costs, however wildfires play a crucial role in a variety of ecosystems. In addition to rejuvenating the forest, wildfires can increase soil fertility and remove dead organic material, which decreases the likelihood of a more intense and destructive wildfire in the future \cite{bond_fires_2017}. In most fires, the problem occurs when they spiral out of control, causing unintended damage to wildlife and populations. Global warming and an increase in droughts have led to more frequent intensive wildfires in countries that were not historically prone to them. Throughout the Mediterranean region, countries have become accustomed to this natural destructive cycle and have been able to reduce burned areas since 1980 by improving fire control, Portugal remains the exception \cite{turco_decreasing_2016}, \cite{european_commission_joint_research_centre_forest_2021}. Keeping a forest clean is essential for controlling wildfires, and forest maintenance plays a crucial role in doing so. Like in other areas, bringing mechanization into the scope of forestry has greatly improve the productivity, leaving the human component as the bottleneck \cite{parker_robotics_2016}.
+Global warming and an increase in droughts have led to more frequent intensive wildfires in countries that were not historically prone to them. Throughout the Mediterranean region, countries have become accustomed to this natural destructive cycle and have been able to reduce burned areas since 1980 by improving fire control with Portugal remaining the exception \cite{turco_decreasing_2016, european_commission_joint_research_centre_forest_2021}. Keeping a forest clean is essential for controlling wildfires, and forest maintenance plays a crucial role in doing so. Like in other areas, bringing mechanization into the scope of forestry has greatly improve the productivity, leaving the human component as the bottleneck \cite{parker_robotics_2016}. It is only natural to assume that robots can play an active role in forestry applications. Although there is not a widespread use of forestry robots, some prototypes were already developed.  Some of these robots are designed to preserve and monitor forests \cite{couceiro_semfire_2019, jelavic_towards_2021, lam_flexible_2011, notomista_slothbot_2019}, while others focus in actively fighting wildfires \cite{noauthor_firefighting_2014, hose_cartridge, hydra}. Furthermore, there are robots specialized in planting, pruning, and harvesting \cite{noauthor_multiscope_nodate, molina_aerial_2017, zhang_rubber-tapping_2019}. Some of these robots weigh over a ton, have large dimensions, and lack flexibility. Consequently, this movement constraint leads to a slow acquisition of data. This bottleneck can be alleviated by the use of a lightweight and portable system designed to gather data efficiently.
 
-According to the \acl{IFR} (\acs{IFR}) report in 2020, the need for robotics is increasing every year  \cite{IFR_robot_report_2020}. Among the many uses of robots, there are healthcare applications, industrial application, agriculture, common households tasks like cleaning as well as dangerous or inaccessible tasks, such as space exploration and mining. It is only natural to assume that robots can play an active role in forestry applications. Although there is not a widespread use of forestry robots, some prototypes were already developed.  Some of these robots are designed to preserve and monitor forests \cite{couceiro_semfire_2019}, \cite{jelavic_towards_2021}, \cite{lam_flexible_2011}, \cite{notomista_slothbot_2019}, while others focus in actively fighting wildfires \cite{noauthor_firefighting_2014}  \cite{hose_cartridge}, \cite{hydra}. Furthermore, there are robots specialized in planting, pruning, and harvesting \cite{noauthor_multiscope_nodate}, \cite{molina_aerial_2017}, \cite{zhang_rubber-tapping_2019}.
-
-Some of these robots weigh over a ton, have large dimensions, and lack flexibility. Consequently, this movement constraint leads to a slow acquisition of data causing a bottleneck in an engineering project's typical workflow: design, develop, test and repeat, since it results in unnecessary delays between the development and testing phases. This bottleneck can be alleviated by the use of a lightweight and portable system designed to gather data efficiently.
-
-In short, wildfires are important to a healthy ecosystem but they need to be controlled to not damage populations and wildlife. The first step to increasing fire control is to clean the forest of dead organic matter, a task that can be performed by robots. As these robots are heavy, scientists and researchers find it difficult to obtain data directly from them, requiring a light system to record the necessary data to develop and test algorithms.
-
-
-\section{Objectives}
-In this work, we aim to design a rigid multisensory apparatus with an onboard computer to map forests. This apparatus combines multiple sensing technologies, such as 3D \acs{LiDAR}, depth cameras, infrared spectroscopy and \acl{IMU} (\acs{IMU}). With this apparatus, we will be able to collect datasets from forest environments, thus supporting forest operations, such as metric-semantic 3D mapping, combustible material identification, and forest cleaning. Aside from designing the apparatus, it is intended to integrate, test, and then compare state-of-the-art 3D mapping techniques based on the ROS middleware.
+In this work, we aim to design a rigid multisensory apparatus with an onboard computer to map forests. This apparatus combines multiple sensing technologies, such as 3D \acl{LiDAR} (\acs{LiDAR}), depth cameras, infrared spectroscopy and \acl{IMU} (\acs{IMU}). With this apparatus, it is desired to collect datasets from forest environments, thus helping to acquire the necessary information to develop and advance the state of the art of several forestry operations, such as metric-semantic 3D mapping, combustible material identification, path planning and forest cleaning. Aside from designing the apparatus, it is intended to integrate, test, and then compare state-of-the-art 3D mapping techniques based on the ROS middleware.
 
 \section{System Requirements}
 
-In order to create a system able to collect the necessary data ensuring it complies with the requirements of future projects a MoSCoWW analysis was performed. Generally, a MoSCoWW analysis is composed by:
-
-\begin{itemize}
-    \item \textbf{Must} states the non-negotiable features for the project.
-    \item \textbf{Should} lists important features that are not crucial but add significant value to the overall project.
-    \item \textbf{Could} is composed by nice to have features that have a small impact on the project as a hole.
-    \item \textbf{Won't} compiles initiatives that will not be implemented in the current time frame.
-    \item \textbf{Would} is an extra category stating features that won't be commited during the execution of the project, but will try to be implemented.
-\end{itemize}
-
-The following MoSCoWW analysis was made for this project:
-
-\begin{itemize}
-    \item \textbf{Must:}
-    \begin{itemize}
-        \item Ensure all software developed is well integrated within the ROS framework since it is a well known and vastly used technology for this type of applications.
-        \item Incorporate the following sensors/cameras:
-        \begin{itemize}
-            \item A Xsens IMU allowing the gathering of the following information: 
-            \begin{itemize}
-                \item Orientation @ 100Hz
-                \item Linear Acceleration @ 100Hz
-                \item Angular Velocity @ 100Hz
-                \item Magnetometer @100 Hz
-            \end{itemize}
-            \item An Intel RealSense D435i that will collect: 
-            \begin{itemize}
-                \item RGB Image @ 12Hz
-                \item Depth Image @ 12Hz
-                \item InfraRed Image @ 12Hz
-                \item Camera intrinsic parameters @0.1Hz
-                \item Linear Acceleration @ 100Hz
-                \item Angular Velocity @ 100Hz
-            \end{itemize}
-            \item A Livox 3D LiDAR to gather:
-            \begin{itemize}
-                \item LaserScans @ 10Hz\
-            \end{itemize}
-        \end{itemize}
-        \item Use a small factor onboard computer able to process and record all the information from the sensors at the desired frequencies.
-        \item Be able to continuously function during a time period of at least 2 hours.
-        \item Employ a cooling solution that ensures the sensors don't go beyond their maximum operating temperature and the body can withstand temperatures of 60degrees Celsius.
-        \item Restrict all sensors and cameras to a fixed position on the apparatus, keeping the geometrical relationship between them constant.
-    \end{itemize}
-    \item \textbf{Should:}
-    \begin{itemize}
-        \item Incorporate a Mynt Eye that will collect the following information:
-        \begin{itemize}
-            \item Depth Image @ 30Hz
-            \item InfraRed Image @ 12Hz
-            \item Camera intrinsic parameters @ 0.1Hz
-            \item Linear velocity @ 100Hz
-            \item Angular acceleration @ 100Hz
-        \end{itemize}    
-        \item Be comfortable and safe for the operator to handle during an extended amount of time.
-        \item Be modular, it should be easy to add/swap/remove sensors or processing nodes with relative ease.
-        \item Have an easy battery replacement method.
-        \item Warn the user in the event of a sensor malfunction at startup, ex. a sensor stops sending data at the desired rate or goes offline.
-    \end{itemize}
-    \item \textbf{Could:}
-    \begin{itemize}   
-        \item Easy access to the memory SSD
-        \item Have a dedicated space for the user to place it's mobile Android device
-        \item Allow the change of the yaw orientation of at least one RGB-D camera, to allow the user to choose the Depth image overlap at a given distance of the multiple Depth sensors (RGB-D, Mynt Eye and LiDAR).
-        \item Have visual feedback for the user.
-    \end{itemize}
-    \item \textbf{Won't:}
-    \begin{itemize}
-        \item Deploy heavy algorithms since the main objective is to gather data, not process it in a live environment.
-        \item Be weather resistance, so it can  not be used in rainy days
-    \end{itemize}
-    \item \textbf{Would:}
-    \begin{itemize}
-        \item Have live visual feedback for the user
-    \end{itemize}
-\end{itemize}
-
+In order to create a system able to collect the necessary data while ensuring it complies with the requirements of future projects a MoSCoWW analysis. The MoSCoW analysis is a framework used to clarify the importance of features of a project. The standard MoSCoW analysis stands for: \textbf{Must, Should, Could, Won't}. Here a slightly different analysis was performed, a MoSCoWW, essentially the \textbf{Would} component is added. The MoSCoWW analysis is presented in the Figure \ref*{fig: moscoww}.
 
 \section{Dissertation Structure}
+The document is structured as follows. In Section \ref*{chap:background}, essential concepts are explained while also displaying other works similar to the one presented here. A detailed description of the design and implementation of this project can be found in Chapter 3. In this chapter the overview of materials and the rationale for the decisions made are explained. The different steps required to implement a complete system are also discussed in Chapter 3. Chapter 4 examines the system's performance in several environments. In the last Chapter, a summary of how successful the project was is drawn, and suggestions for improvement are offered.
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/introduction/moscoww_analysis.pdf}
+    \caption{MoSCoWW analysis for the project}
+    \label{fig: moscoww}
+\end{figure}
